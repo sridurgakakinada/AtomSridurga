@@ -1,0 +1,22 @@
+/* ChatBotIcon.css */
+.chatbot-icon {
+    /* background-image: url('./chatbotImage.jpeg'); */
+    background-image: url("https: //images-platform.99static.com/4VNlmbLPzOCSHP8RB4bAwwohd0g=/0x0:1024x1024/500x500/top/smart/99designs-contests-attachments/91/91577/attachment_91577988");
+    position: fixed;
+    bottom: 40px;
+    right: 40px;
+    width: 80px;
+    height: 80px;
+    background-color: white;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.chatbot-icon img {
+    width: 150%;
+    height: 150%;
+    object-fit: contain;
+}
