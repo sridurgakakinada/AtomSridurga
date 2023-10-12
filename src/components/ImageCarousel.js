@@ -1,5 +1,9 @@
 // ImageCarousel.js
 import React, { useState, useEffect } from "react";
+import { useHistory } from "react-router-dom"; // Import useHistory
+import UserLogin from "./UserLogin";
+import { Link } from "react-router-dom";
+import GetStarted from "./GetStarted";
 
 const ImageCarousel = ({ images, interval }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -20,6 +24,9 @@ const ImageCarousel = ({ images, interval }) => {
           className={`carousel-item ${index === currentIndex ? "active" : ""}`}
         >
           <img src={image} alt={`Image ${index}`} />
+          <Link to="/getStarted">
+            <button>GET STARTED</button>
+          </Link>
         </div>
       ))}
     </div>

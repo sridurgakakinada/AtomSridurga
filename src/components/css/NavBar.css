@@ -1,11 +1,12 @@
 /* NavBar.css */
 .navbar {
-    background-color: green;
+    background-color:#008200;
     color: #fff;
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 10px 20px;
+    height: 100px;
 }
 
 .navbar a {
@@ -44,15 +45,6 @@ background-image:"https: //cdn3.vectorstock.com/i/1000x1000/14/42/healthcare-plu
     /* Add some spacing between the logo and links */
 }
 
-/* .logo a {
-    width: 20px;
-    height: inherit;
-    font-size: 24px;
-    font-weight: bold;
-    color: white;
-    background-color: aqua;
-} */
-
 .nav-links {
     list-style: none;
     display: flex;
@@ -60,4 +52,19 @@ background-image:"https: //cdn3.vectorstock.com/i/1000x1000/14/42/healthcare-plu
 
 .nav-links li {
     margin: 0;
+}
+/* NavBar.css */
+/* NavBar.css */
+.login-modal {
+    /* margin-top: 10%;
+    margin-left: 10%; */
+    /* transform: translate(-50%, -50%); */
+    background-color: rgba(0, 0, 0, 0.8);
+        /* Semi-transparent background */
+            /* z-index: 999; */
+            width: 100%;
+            height: 100%;
+            /* display: flex; */
+                justify-content: center;
+                align-items: center;
 }
