@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+
 import "./ChatBot.css";
 import { Route, useHistory } from "react-router-dom";
 
@@ -29,12 +31,52 @@ const HomePage = () => {
     return () => clearTimeout(timer);
   }, []);
 
+  const divStyle = {
+    backgroundImage:
+      'url("https://findado.osteopathic.org/wp-content/uploads/2021/08/GettyImages-1214206519.jpg")', // Replace with your image URL
+    backgroundSize: "cover",
+    height: "100vh",
+    marginTop: 0,
+  };
+  const centerDivStyle = {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-around",
+    alignItems: "center",
+    padding: "10%",
+    width: "50%",
+    margin: "auto",
+
+    height: "100vh", // Makes the container take up the full viewport height
+  };
+
+  const buttonStyle = {
+    backgroundColor: "green", // Customize the button styles
+    color: "white",
+    padding: "10px 20px",
+    borderRadius: "5px",
+    textDecoration: "none",
+    display: "inline - block",
+  };
+  const linkStyle = {
+    textDecoration: "none", // Remove the underline from the link
+  };
+
   return (
-    <div className="home-page">
+    // <div className="home-page" style={divStyle}>
+    <div style={divStyle}>
       {/* <NavBar /> */}
-      <div>
-        <ImageCarousel images={images} interval={interval} />
+      <div style={centerDivStyle}>
+        <Link to="/getStarted" style={linkStyle}>
+          <button style={buttonStyle}>GET STARTED</button>
+        </Link>
+        <br></br>
+        <Link to="/DoctorLogin" style={linkStyle}>
+          <button style={buttonStyle}>DOCTOR LOGIN</button>
+        </Link>
       </div>
+
+      {/* <div><ImageCarousel images={images} interval={interval} /></div> */}
     </div>
   );
 };
