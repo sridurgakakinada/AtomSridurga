@@ -22,6 +22,7 @@ class HealthwebappApplicationTests {
 	void contextLoads() {
 	}
 	
+	
 	@Test
 	void testUserRegisterationApi() {
 		RegisterPatientRequest registerPatientRequest = new RegisterPatientRequest();
