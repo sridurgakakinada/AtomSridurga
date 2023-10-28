@@ -8,4 +8,7 @@ import com.atom.healthwebapp.entity.DoctorAuthDetails;
 //@Repository
 public interface DoctorAuthDetailsRepo extends JpaRepository<DoctorAuthDetails,String>{
 	DoctorAuthDetails getById(String id);
+	DoctorAuthDetails getBydocDesignation(String designation);
+	
+	
 }

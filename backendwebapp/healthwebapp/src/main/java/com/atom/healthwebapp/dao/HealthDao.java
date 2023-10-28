@@ -18,6 +18,7 @@ public class HealthDao {
 	@Autowired
 	private DoctorAuthDetailsRepo doctorAuthDetailsRepo;
 	
+	
 	public PatientAuthDetails getPatientAuthDetails(AuthenticateRequest authenticateRequest) {
 		
 		PatientAuthDetails patientAuthDetails = patientAuthDetailsRepo.getByUserName(authenticateRequest.getUserName());
@@ -33,4 +34,32 @@ public class HealthDao {
 		return doctorAuthDetails;
 		
 	}
+	public DoctorAuthDetails getDoctorByDesignation(String designation) {
+		
+		DoctorAuthDetails doctorAuthDetails = doctorAuthDetailsRepo.getBydocDesignation(designation);
+		
+		return doctorAuthDetails;
+		
+	}
+	
+	
+	
+	public void savePatientDetails(PatientAuthDetails patientAuthDetails) {
+		patientAuthDetailsRepo.save(patientAuthDetails);
+	}
+	
+	
+	public PatientAuthDetails getPatientByUserName(String username) {
+		
+		PatientAuthDetails patientAuthDetails = patientAuthDetailsRepo.getByUserName(username);
+		
+		return patientAuthDetails;
+		
+	}
+	
+	
+	
+	
+	
+	
 }
