@@ -41,11 +41,22 @@ public class HealthDao {
 		return doctorAuthDetails;
 		
 	}
+	public DoctorAuthDetails getDoctorById(String id) {
+		
+		DoctorAuthDetails doctorAuthDetails = doctorAuthDetailsRepo.getById(id);
+		
+		return doctorAuthDetails;
+		
+	}
 	
 	
 	
 	public void savePatientDetails(PatientAuthDetails patientAuthDetails) {
 		patientAuthDetailsRepo.save(patientAuthDetails);
+	}
+	
+	public void saveDoctorDetails(DoctorAuthDetails doctorAuthDetails) {
+		doctorAuthDetailsRepo.save(doctorAuthDetails);
 	}
 	
 	
@@ -57,7 +68,9 @@ public class HealthDao {
 		
 	}
 	
-	
+	public void saveDocReply(PatientAuthDetails patientAuthDetails) {
+		
+	}
 	
 	
 	

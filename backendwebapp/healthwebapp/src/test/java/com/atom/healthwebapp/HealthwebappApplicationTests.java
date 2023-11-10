@@ -10,6 +10,7 @@ import com.atom.healthwebapp.controller.HealthController;
 import com.atom.healthwebapp.dto.request.AuthenticateRequest;
 import com.atom.healthwebapp.dto.request.RegisterPatientRequest;
 import com.atom.healthwebapp.dto.response.ApiResponse;
+import com.atom.healthwebapp.dto.response.AuthenticateResponse;
 import com.atom.healthwebapp.dto.response.QueryListResponse;
 
 @SpringBootTest
@@ -39,13 +40,46 @@ class HealthwebappApplicationTests {
 	}
 	
 	@Test
+	void testAuthenticationFailureApi() {
+		AuthenticateRequest authenticateRequest = new AuthenticateRequest();
+		authenticateRequest.setUserName("hema");
+		authenticateRequest.setPassword("hema");
+		authenticateRequest.setUserType("Hema");
+		authenticateRequest.setId("1");
+		
+		AuthenticateResponse apiResponse =	healthController.authenticateUser(authenticateRequest);
+		assertEquals("Authentication Successful",apiResponse.getMessage());
+		
+	}
+	
+	
+	
+	
+	
+	@Test
+	void testApi() {
+		AuthenticateRequest authenticateRequest = new AuthenticateRequest();
+		authenticateRequest.setUserName("hema");
+		authenticateRequest.setPassword("hema");
+		authenticateRequest.setUserType("Hema");
+		authenticateRequest.setId("1");
+		
+		AuthenticateResponse apiResponse =	healthController.authenticateUser(authenticateRequest);
+		assertEquals("Authentication Failed",apiResponse.getMessage());
+		
+	}
+	
+	
+	
+	
+	@Test
 	void testGetQueriesForDocApi() {
 		AuthenticateRequest authenticateRequest = new AuthenticateRequest();
 		authenticateRequest.setUserName("hema");
 		authenticateRequest.setId("1");
 		QueryListResponse queryListResponse =	healthController.getQueriesForDoc(authenticateRequest);
 		for(int i=0;i<queryListResponse.getQueryList().size();i++) {
-			assertEquals("query",queryListResponse.getQueryList().get(i));
+			assertEquals("I have cold and cough since 3 weeks? what should be done",queryListResponse.getQueryList().get(i));
 		}
 		
 	}

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.atom.healthwebapp.dto.request.AuthenticateRequest;
 import com.atom.healthwebapp.dto.request.RegisterPatientRequest;
+import com.atom.healthwebapp.dto.request.SaveDoctorReplyRequest;
 import com.atom.healthwebapp.dto.request.SendQueryToDocRequest;
 import com.atom.healthwebapp.dto.response.ApiResponse;
 import com.atom.healthwebapp.dto.response.AuthenticateResponse;
@@ -69,5 +70,22 @@ public class HealthController {
 		return response;
 	}
 	
+	@PostMapping(path = "/Services/Health/SaveDoctorReplyToPatientQuery", consumes = { 
+			MediaType.APPLICATION_JSON_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE,
+					 })
+	@ResponseBody
+	public ApiResponse saveDocReplyToPatientQuery(@RequestBody SaveDoctorReplyRequest saveDoctorReplyRequest) {
+		ApiResponse apiResponse = healthService.saveDocReplyService(saveDoctorReplyRequest);
+		return apiResponse;
+	}
+	
+	@PostMapping(path = "/Services/Health/getDoctorReplyForPatient", consumes = { 
+			MediaType.APPLICATION_JSON_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE,
+					 })
+	@ResponseBody
+	public QueryListResponse getDoctorReplyForPatient(@RequestBody SendQueryToDocRequest sendQueryToDocRequest) {
+		QueryListResponse response = healthService.getDoctorReplyForPatientService(sendQueryToDocRequest);
+		return response;
+	}
 
 }
