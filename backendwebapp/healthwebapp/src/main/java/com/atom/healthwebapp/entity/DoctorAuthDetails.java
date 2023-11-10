@@ -22,7 +22,7 @@ public class DoctorAuthDetails{
 	
 	
 	@OneToMany(fetch = FetchType.LAZY, targetEntity = PatientQueries.class, cascade = CascadeType.ALL, orphanRemoval = false)
-	@JoinColumn(name = "FK_PATIENTQUERIES_ID")
+	@JoinColumn(name = "FK_DOC_PATIENTQUERIES_ID")
 	private List<PatientQueries> patientQueries;
 
 	
