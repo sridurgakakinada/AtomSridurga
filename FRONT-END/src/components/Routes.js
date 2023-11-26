@@ -6,6 +6,9 @@ import UserLogin from "./UserLogin";
 import GetStarted from "./GetStarted";
 import Register from "./Register";
 import DoctorLogin from "./DoctorLogin";
+import UserDashboard from "./UserDashboard";
+import DoctorDashboard from "./DoctorDashboard";
+import OrganDetail from "./OrganDetail";
 
 const AppRoutes = () => {
   return (
@@ -18,6 +21,15 @@ const AppRoutes = () => {
         {/* Use 'element' instead of 'component' */}
         <Route path="/Register" element={<Register />} />{" "}
         <Route path="/DoctorLogin" element={<DoctorLogin />} />{" "}
+        <Route path="/UserDashboard" element={<UserDashboard />} />{" "}
+        <Route path="/DoctorDashboard" element={<DoctorDashboard />} />{" "}
+        {/* <Route path="/organ-detail/${organ.name}" element={<OrganDetail />} />{" "} */}
+        <Route path="/organ-detail/:organName" element={<OrganDetail />} />
+        {""}
+        {/* <Route
+  path="/organ-detail/:organName"
+  element={<OrganDetail username={username} name={name} description={description} />}
+/> */}
       </Routes>
     </Router>
   );

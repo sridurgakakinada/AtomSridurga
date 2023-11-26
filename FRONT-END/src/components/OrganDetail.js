@@ -3,8 +3,19 @@
 import React from "react";
 import "./css/OrganDetail.css";
 import { useState } from "react";
+import { useLocation } from "react-router-dom";
 
 function OrganDetail(props) {
+  const location = useLocation();
+  const { state } = location;
+  const username = props.username;
+  console.log("the user name is : ", username);
+
+  // const username = state && state.username ? state.username : "";
+  const name = state && state.name ? state.name : "";
+  const description = state && state.description ? state.description : "";
+  const imageUrl = state && state.imageUrl ? state.imageUrl : "";
+
   const relatedDiseases = [
     "Arrhythmia: This condition refers to an irregular heartbeat. Arrhythmias can be caused by a number of factors, including CAD, heart failure, and certain medications.",
     "Heart valve disease: This condition occurs when one or more of the heart valves does not function properly. Heart valve disease can be caused by a number of factors, including infection, birth defects, and aging.",
@@ -20,23 +31,23 @@ function OrganDetail(props) {
 
   ///Decorator Pattern
 
-  const doctorDecorator = (doctorDetails, relatedDiseases) => {
-    return {
-      ...doctorDetails,
-      relatedDiseases,
-      printDetails: function () {
-        console.log(`Doctor: ${this.nameDoctor}`);
-        console.log(`Specialization: ${this.specialization}`);
-        console.log(`Hospital: ${this.hospital}`);
-        console.log("Related Diseases:");
-        this.relatedDiseases.forEach((disease) => console.log(`- ${disease}`));
-      },
-    };
-  };
+  // const doctorDecorator = (doctorDetails, relatedDiseases) => {
+  //   return {
+  //     ...doctorDetails,
+  //     relatedDiseases,
+  //     printDetails: function () {
+  //       console.log(`Doctor: ${this.nameDoctor}`);
+  //       console.log(`Specialization: ${this.specialization}`);
+  //       console.log(`Hospital: ${this.hospital}`);
+  //       console.log("Related Diseases:");
+  //       this.relatedDiseases.forEach((disease) => console.log(`- ${disease}`));
+  //     },
+  //   };
+  // };
 
   // Usage
-  const decoratedDoctor = doctorDecorator(doctorDetails, relatedDiseases);
-  decoratedDoctor.printDetails();
+  // const decoratedDoctor = doctorDecorator(doctorDetails, relatedDiseases);
+  // decoratedDoctor.printDetails();
 
   return (
     <div className="organ-detail">
@@ -47,8 +58,10 @@ function OrganDetail(props) {
             src="https://cdn-icons-png.flaticon.com/128/954/954406.png"
             alt="Card 1"
           />
-          <h1>Heart</h1>
-          <h3>The heart pumps blood through the circulatory system.</h3>
+          {/* <h1>Heart</h1> */}
+          <h1>{name}</h1>
+          {/* <h3>The heart pumps blood through the circulatory system.</h3> */}
+          <h3>{description}</h3>
         </div>
         <div className="related-diseases">
           <h5>Related Diseases</h5>

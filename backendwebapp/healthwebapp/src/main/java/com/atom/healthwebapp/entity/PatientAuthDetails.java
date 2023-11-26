@@ -30,6 +30,7 @@ public class PatientAuthDetails {
 	private Long id;
 	private String userName;
 	private String password;
+	private String repeatPassword;
 	private String fullName;
 	private String emailid;
 	private String mobileNumber;
@@ -57,6 +58,13 @@ public class PatientAuthDetails {
 	}
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public String getRepeatPassword() {
+		return repeatPassword;
+	}
+	public void setRepeatPassword(String password) {
+		this.repeatPassword = repeatPassword;
 	}
 	public String getFullName() {
 		return fullName;
