@@ -1,0 +1,39 @@
+/* OrganDetail.css */
+
+.organ-detail {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.left-section {
+    text-align: center;
+    padding: 20px;
+}
+
+img {
+    width: 150px;
+    /* Adjust the width as needed */
+    height: 150px;
+    /* Adjust the height as needed */
+}
+
+.related-diseases {
+    margin-top: 20px;
+}
+
+.right-section {
+    margin-left: 50px;
+    /* Adjust the margin-left as needed */
+}
+
+.doctor-info,
+.ask-question-form {
+    text-align: left;
+    padding: 20px;
+}
+
+.ask-question-form textarea {
+    width: 100%;
+}
