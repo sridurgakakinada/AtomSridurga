@@ -33,6 +33,7 @@ public class PatientAuthDetails {
 	private String fullName;
 	private String emailid;
 	private String mobileNumber;
+	private String patientHistory;
 	
 	
 	@OneToMany(fetch = FetchType.LAZY, targetEntity = PatientQueries.class, cascade = CascadeType.ALL, orphanRemoval = false)
@@ -81,6 +82,12 @@ public class PatientAuthDetails {
 	}
 	public void setPatientQueries(List<PatientQueries> patientQueries) {
 		this.patientQueries = patientQueries;
+	}
+	public String getPatientHistory() {
+		return patientHistory;
+	}
+	public void setPatientHistory(String patientHistory) {
+		this.patientHistory = patientHistory;
 	}
 	
 	

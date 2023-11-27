@@ -2,6 +2,7 @@ package com.atom.healthwebapp.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,19 +16,32 @@ import com.atom.healthwebapp.dto.request.SaveDoctorReplyRequest;
 import com.atom.healthwebapp.dto.request.SendQueryToDocRequest;
 import com.atom.healthwebapp.dto.response.ApiResponse;
 import com.atom.healthwebapp.dto.response.AuthenticateResponse;
+import com.atom.healthwebapp.dto.response.DoctorResponse;
+import com.atom.healthwebapp.dto.response.PatientDetails;
+import com.atom.healthwebapp.dto.response.PatientResponse;
 import com.atom.healthwebapp.dto.response.Query;
 import com.atom.healthwebapp.dto.response.QueryListResponse;
 import com.atom.healthwebapp.entity.DoctorAuthDetails;
 import com.atom.healthwebapp.entity.PatientAuthDetails;
 import com.atom.healthwebapp.entity.PatientQueries;
+import com.atom.healthwebapp.repository.DoctorAuthDetailsRepo;
+import com.atom.healthwebapp.repository.PatientQueryRepo;
 import com.atom.healthwebapp.repository.PatientQueryRepository;
 import com.atom.healthwebapp.utils.CommonUtil;
+
+import io.micrometer.common.util.StringUtils;
 
 @Service
 public class HealthService implements DoctorServiceInterface{
 	
 	@Autowired
 	private HealthDao healthDao;
+	
+	@Autowired
+	private PatientQueryRepo patientQueryRepo;
+	
+	@Autowired
+	private DoctorAuthDetailsRepo doctorAuthDetailsRepo;
 	
 	
 	
@@ -72,6 +86,7 @@ public class HealthService implements DoctorServiceInterface{
 		patientAuthDetails.setMobileNumber(registerPatientRequest.getMobileNumber());
 		patientAuthDetails.setPassword(registerPatientRequest.getPassword());
 		patientAuthDetails.setUserName(registerPatientRequest.getUsername());
+		patientAuthDetails.setPatientHistory(registerPatientRequest.getPatientHistory());
 		healthDao.savePatientDetails(patientAuthDetails);
 		apiResponse.setMessage("User registered successful");
 		
@@ -80,22 +95,39 @@ public class HealthService implements DoctorServiceInterface{
 	
 	
 	public ApiResponse sendQueryToDocService(SendQueryToDocRequest sendQueryToDocRequest) {
+		
 		ApiResponse apiResponse = new ApiResponse();
-		PatientAuthDetails patientAuthDetails = healthDao.getPatientByUserName(sendQueryToDocRequest.getUsername());
-		List<PatientQueries> listQueries = new ArrayList<>();
-		PatientQueries patientQuery = new PatientQueries();
-		DoctorAuthDetails doctorAuthDetails = healthDao.getDoctorByDesignation(sendQueryToDocRequest.getDocDesignation());
+		try {
 		
-		patientQuery.setQuestion(sendQueryToDocRequest.getQuery());
-		listQueries.add(patientQuery);
-		patientAuthDetails.setPatientQueries(listQueries);
-		doctorAuthDetails.setPatientQueries(listQueries);
+			PatientAuthDetails patientAuthDetails = healthDao.getPatientByUserName(sendQueryToDocRequest.getUsername());
+			List<PatientQueries> listQueries = new ArrayList<>();
+			PatientQueries patientQuery = new PatientQueries();
+			DoctorAuthDetails doctorAuthDetails = healthDao.getDoctorByDesignation(sendQueryToDocRequest.getDocDesignation());
+			if(doctorAuthDetails==null) {
+				doctorAuthDetails = new DoctorAuthDetails();
+				doctorAuthDetails.setDocDesignation("phsician");
+				doctorAuthDetails.setFullName("doctor");
+				doctorAuthDetails.setId("12");
+				doctorAuthDetails.setPassword("doctor");
+				doctorAuthDetails.setUserName("doctorusername");
+				doctorAuthDetailsRepo.save(doctorAuthDetails);
+			}
+			patientQuery.setQuestion(sendQueryToDocRequest.getQuery());
+			listQueries.add(patientQuery);
+			patientAuthDetails.setPatientQueries(listQueries);
+			doctorAuthDetails.setPatientQueries(listQueries);
+			
+			healthDao.savePatientDetails(patientAuthDetails);
+			
 		
-		healthDao.savePatientDetails(patientAuthDetails);
-		
-	
-		
-		apiResponse.setMessage("Query Sent Succesfull");
+			
+			apiResponse.setMessage("Query Sent Succesfull");
+			
+			
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
 		
 		return apiResponse;
 	}
@@ -123,6 +155,17 @@ public class HealthService implements DoctorServiceInterface{
 			Query query = new Query();
 			query.setQuestion(patientQuery.getQuestion());
 			query.setQuestionId(patientQuery.getId());
+			if(StringUtils.isNotBlank(patientQuery.getAnswer())) {
+				query.setReply(patientQuery.getAnswer());
+			}
+			Long patientId = patientQueryRepo.getPatientId(patientQuery.getId());
+			PatientAuthDetails patientAuthDetails = healthDao.getPatientById(patientId);
+			PatientDetails patientDetails = new PatientDetails();
+			patientDetails.setEmailid(patientAuthDetails.getEmailid());
+			patientDetails.setFullname(patientAuthDetails.getFullName());
+			patientDetails.setMobileNumber(patientAuthDetails.getMobileNumber());
+			patientDetails.setPatientHistory(patientAuthDetails.getPatientHistory());
+			query.setPatientDetails(patientDetails);
 			queryList.add(query);
 	        
 	      } 
@@ -134,23 +177,49 @@ public class HealthService implements DoctorServiceInterface{
 	
 	public ApiResponse saveDocReplyService(SaveDoctorReplyRequest saveDoctorReplyRequest) {
 		ApiResponse apiResponse = new ApiResponse();
-		DoctorAuthDetails doctorAuthDetails = healthDao.getDoctorById(saveDoctorReplyRequest.getId());
-		List<PatientQueries> listQueries = doctorAuthDetails.getPatientQueries();
-		List<PatientQueries> newlistQueries = new ArrayList<>();
-		
-		
-		for(int i=0;i<listQueries.size();i++) {
-			PatientQueries patientQuery = listQueries.get(i);
-			if(saveDoctorReplyRequest.getQuestionid()==patientQuery.getId()) {
-				patientQuery.setAnswer(saveDoctorReplyRequest.getDocreply());
-				newlistQueries.add(patientQuery);		
+		DoctorAuthDetails doctorAuthDetails = new DoctorAuthDetails();
+		try {
+				
+				doctorAuthDetails = healthDao.getDoctorById(saveDoctorReplyRequest.getId());
+				if(Optional.ofNullable(doctorAuthDetails).isEmpty()) {
+					doctorAuthDetails = new DoctorAuthDetails();
+					doctorAuthDetails.setDocDesignation("phsician");
+					doctorAuthDetails.setFullName("doctor");
+					doctorAuthDetails.setId("1");
+					doctorAuthDetails.setPassword("doctor");
+					doctorAuthDetails.setUserName("doctorusername");
+					PatientQueries patientQuery = new PatientQueries();
+					patientQuery.setQuestion("I have bad cold");
+					List<PatientQueries> listQueries = new ArrayList();
+					listQueries.add(patientQuery);
+					//patientAuthDetails.setPatientQueries(listQueries);
+					doctorAuthDetails.setPatientQueries(listQueries);
+					doctorAuthDetailsRepo.save(doctorAuthDetails);
+					
+					
+				}
+				
+				List<PatientQueries> listQueries = doctorAuthDetails.getPatientQueries();
+				List<PatientQueries> newlistQueries = new ArrayList<>();
+				
+				
+				for(int i=0;i<listQueries.size();i++) {
+					PatientQueries patientQuery = listQueries.get(i);
+					if(saveDoctorReplyRequest.getQuestionid()==patientQuery.getId()) {
+						patientQuery.setAnswer(saveDoctorReplyRequest.getDocreply());
+						newlistQueries.add(patientQuery);		
+					}
+					
+					
+				}
+				doctorAuthDetails.setPatientQueries(newlistQueries);
+				healthDao.saveDoctorDetails(doctorAuthDetails);	
+				apiResponse.setMessage("Doctor Reply Saved Successful");
+				
 			}
-			
-			
+		catch(Exception e) {
+			e.printStackTrace();
 		}
-		doctorAuthDetails.setPatientQueries(newlistQueries);
-		healthDao.saveDoctorDetails(doctorAuthDetails);	
-		apiResponse.setMessage("Doctor Reply Saved Successful");
 		return apiResponse;
 		
 	}
@@ -172,5 +241,37 @@ public class HealthService implements DoctorServiceInterface{
 		return queryListResponse;
 	}
 	
+	public List<DoctorResponse> getDoctorList() {
+		List<DoctorAuthDetails> doctorAuthDetailsList = healthDao.getDoctorList();
+		List<DoctorResponse> doctorResponseList = new ArrayList();
+		
+		for(int i=0;i<doctorAuthDetailsList.size();i++) {
+			DoctorResponse doctorResponse = new DoctorResponse();
+			DoctorAuthDetails doctorAuthDetails = doctorAuthDetailsList.get(i);
+			doctorResponse.setDoctorDesignation(doctorAuthDetails.getDocDesignation());
+			doctorResponse.setDoctorName(doctorAuthDetails.getFullName());
+			doctorResponseList.add(doctorResponse);
+		}
+		
+		return doctorResponseList;
+	}
+	
+	public List<PatientResponse> getPatientList() {
+		List<PatientAuthDetails> patientAuthDetailsList = healthDao.getPatientList();
+		List<PatientResponse> patientResponseList = new ArrayList();
+		
+		for(int i=0;i<patientAuthDetailsList.size();i++) {
+			PatientResponse patientResponse = new PatientResponse();
+			PatientAuthDetails patientAuthDetails = patientAuthDetailsList.get(i);
+			patientResponse.setPatientName(patientAuthDetails.getFullName());
+			patientResponse.setEmailId(patientAuthDetails.getEmailid());
+			patientResponse.setPhoneNumber(patientAuthDetails.getMobileNumber());
+			patientResponse.setUsername(patientAuthDetails.getUserName());
+			patientResponse.setPatientHealthHistory(patientAuthDetails.getPatientHistory());
+			patientResponseList.add(patientResponse);
+		}
+		
+		return patientResponseList;
+	}
 	
 }

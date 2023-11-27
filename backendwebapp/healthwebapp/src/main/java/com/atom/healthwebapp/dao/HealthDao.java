@@ -1,5 +1,7 @@
 package com.atom.healthwebapp.dao;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -50,6 +52,13 @@ public class HealthDao {
 	}
 	
 	
+	public PatientAuthDetails getPatientById(Long id) {
+		
+		PatientAuthDetails patientAuthDetails = patientAuthDetailsRepo.getById(id);
+		
+		return patientAuthDetails;
+		
+	}
 	
 	public void savePatientDetails(PatientAuthDetails patientAuthDetails) {
 		patientAuthDetailsRepo.save(patientAuthDetails);
@@ -68,11 +77,13 @@ public class HealthDao {
 		
 	}
 	
-	public void saveDocReply(PatientAuthDetails patientAuthDetails) {
-		
+	public List<DoctorAuthDetails> getDoctorList() {
+		return doctorAuthDetailsRepo.getDoctorList();
 	}
 	
-	
+	public List<PatientAuthDetails> getPatientList(){
+		return patientAuthDetailsRepo.getPatientList();
+	}
 	
 	
 }

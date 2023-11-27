@@ -2,8 +2,11 @@ package com.atom.healthwebapp.controller;
 
 
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -15,6 +18,8 @@ import com.atom.healthwebapp.dto.request.SaveDoctorReplyRequest;
 import com.atom.healthwebapp.dto.request.SendQueryToDocRequest;
 import com.atom.healthwebapp.dto.response.ApiResponse;
 import com.atom.healthwebapp.dto.response.AuthenticateResponse;
+import com.atom.healthwebapp.dto.response.DoctorResponse;
+import com.atom.healthwebapp.dto.response.PatientResponse;
 import com.atom.healthwebapp.dto.response.QueryListResponse;
 import com.atom.healthwebapp.service.HealthService;
 
@@ -87,5 +92,23 @@ public class HealthController {
 		QueryListResponse response = healthService.getDoctorReplyForPatientService(sendQueryToDocRequest);
 		return response;
 	}
+	
+	@GetMapping(path = "/Services/Health/getDoctorList", /*consumes = { 
+			MediaType.APPLICATION_JSON_VALUE },*/ produces = { MediaType.APPLICATION_JSON_VALUE})
+	@ResponseBody
+	public List<DoctorResponse> getDoctorList() {
+		List<DoctorResponse> doctorResponseList = healthService.getDoctorList();
+		return doctorResponseList;
+		
+	}
+	@GetMapping(path = "/Services/Health/getPatientList", /*consumes = { 
+			MediaType.APPLICATION_JSON_VALUE },*/ produces = { MediaType.APPLICATION_JSON_VALUE})
+	@ResponseBody
+	public List<PatientResponse> getPatientList() {
+		List<PatientResponse> patientResponseList = healthService.getPatientList();
+		return patientResponseList;
+		
+	}
+	
 
 }
