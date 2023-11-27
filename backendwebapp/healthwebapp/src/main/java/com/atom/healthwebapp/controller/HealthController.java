@@ -47,6 +47,28 @@ public class HealthController {
 		return authenticateResponse;
 	}
 	
+	@PostMapping(path = "/Services/Health/getPatientDetails", consumes = { 
+			MediaType.APPLICATION_JSON_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE,
+					 })
+	@ResponseBody
+	public PatientResponse getPatientDetails(@RequestBody AuthenticateRequest authenticateRequest) {
+		PatientResponse patientResponse = healthService.getPatientDetails(authenticateRequest);
+		return patientResponse;
+	}
+	
+	
+	@PostMapping(path = "/Services/Health/getDoctorDetails", consumes = { 
+			MediaType.APPLICATION_JSON_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE,
+					 })
+	@ResponseBody
+	public DoctorResponse getDoctorDetails(@RequestBody AuthenticateRequest authenticateRequest) {
+		DoctorResponse doctorResponse = healthService.getDoctorDetails(authenticateRequest);
+		return doctorResponse;
+	}
+	
+	
+	
+	
 	@PostMapping(path = "/Services/Health/RegisterPatient", consumes = { 
 			MediaType.APPLICATION_JSON_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE,
 					 })

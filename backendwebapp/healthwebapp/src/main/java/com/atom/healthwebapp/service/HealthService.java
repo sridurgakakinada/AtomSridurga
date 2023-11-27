@@ -46,6 +46,36 @@ public class HealthService implements DoctorServiceInterface{
 	
 	
 	
+	public PatientResponse getPatientDetails(AuthenticateRequest authenticateRequest) {
+		
+		PatientResponse patientResponse = new PatientResponse();
+		PatientAuthDetails patientAuthDetails = healthDao.getPatientAuthDetails(authenticateRequest);
+		if(patientAuthDetails.getPassword().equals(authenticateRequest.getPassword())&&(patientAuthDetails.getUserName().equals(authenticateRequest.getUserName()))) {
+			patientResponse.setEmailId(patientAuthDetails.getEmailid());
+			patientResponse.setPatientHealthHistory(patientAuthDetails.getPatientHistory());
+			patientResponse.setPhoneNumber(patientAuthDetails.getMobileNumber());
+			patientResponse.setUsername(patientAuthDetails.getUserName());
+			patientResponse.setPatientName(patientAuthDetails.getFullName());
+			
+		}
+		
+		return patientResponse;
+	}
+	
+	public DoctorResponse getDoctorDetails(AuthenticateRequest authenticateRequest) {
+		
+		DoctorResponse doctorResponse = new DoctorResponse();
+		DoctorAuthDetails doctorAuthDetails = healthDao.getDoctorAuthDetails(authenticateRequest);
+		if(doctorAuthDetails.getPassword().equals(authenticateRequest.getPassword())&&(doctorAuthDetails.getUserName().equals(authenticateRequest.getUserName()))) {
+			doctorResponse.setDoctorDesignation(doctorAuthDetails.getDocDesignation());
+			doctorResponse.setDoctorName(doctorAuthDetails.getFullName());
+			
+		}
+		
+		return doctorResponse;
+	}
+	
+	
 	public AuthenticateResponse authenticateUserService(AuthenticateRequest authenticateRequest) {
 		AuthenticateResponse authenticateResponse = new AuthenticateResponse();
 		
