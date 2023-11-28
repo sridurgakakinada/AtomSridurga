@@ -7,6 +7,9 @@ jobs:
     steps:
       - checkout
       - run:
+          name: Debug - List Contents Before Build
+          command: ls -R
+      - run:
           name: Install Dependencies
           command: npm install
       - run:
