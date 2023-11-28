@@ -10,6 +10,9 @@ jobs:
       - run:
           name: Build
           command: npm build
+      - run:
+          name: Debug - List Contents
+          command: ls -R AtomSridurga/FRONT-END
       - persist_to_workspace:
           root: /
           paths:
@@ -21,6 +24,9 @@ jobs:
     steps:
       - attach_workspace:
           at: /
+      - run:
+          name: Debug - List Workspace Contents
+          command: ls -R AtomSridurga/FRONT-END
       - run:
           name: Run Tests
           command: npm test -- AtomSridurga/FRONT-END/src/GetStarted.test.js AtomSridurga/FRONT-END/src/DoctorLogin.test.js AtomSridurga/FRONT-END/src/Register.test.js
