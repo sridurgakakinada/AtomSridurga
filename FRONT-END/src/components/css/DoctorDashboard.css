@@ -1,0 +1,69 @@
+.doctor-dashboard {
+    display: flex;
+    justify-content: space-around;
+    margin: 20px;
+}
+
+.patients-list,
+.queries-list,
+.query-details {
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 8px;
+    width: 30%;
+}
+
+.patients-list h2,
+.queries-list h2,
+.query-details h2 {
+    text-align: center;
+    color: #333;
+}
+
+.patients-list ul,
+.queries-list ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.patients-list li,
+.queries-list li {
+    padding: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.patients-list li:hover,
+.queries-list li:hover {
+    background-color: #f0f0f0;
+}
+
+.query-details form {
+    margin-top: 20px;
+}
+
+.query-details label {
+    display: block;
+    margin-bottom: 8px;
+}
+
+.query-details textarea {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 12px;
+    resize: vertical;
+}
+
+.query-details button {
+    background-color: #4caf50;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.query-details button:hover {
+    background-color: #45a049;
+}

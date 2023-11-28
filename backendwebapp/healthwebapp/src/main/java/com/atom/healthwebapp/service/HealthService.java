@@ -115,6 +115,7 @@ public class HealthService implements DoctorServiceInterface{
 		patientAuthDetails.setFullName(registerPatientRequest.getFullname());
 		patientAuthDetails.setMobileNumber(registerPatientRequest.getMobileNumber());
 		patientAuthDetails.setPassword(registerPatientRequest.getPassword());
+		patientAuthDetails.setPassword(registerPatientRequest.getRepeatPassword());
 		patientAuthDetails.setUserName(registerPatientRequest.getUsername());
 		patientAuthDetails.setPatientHistory(registerPatientRequest.getPatientHistory());
 		healthDao.savePatientDetails(patientAuthDetails);

@@ -38,6 +38,7 @@ class HealthwebappApplicationTests {
 		RegisterPatientRequest registerPatientRequest = new RegisterPatientRequest();
 		registerPatientRequest.setUsername("hema");
 		registerPatientRequest.setPassword("hem");
+		registerPatientRequest.setRepeatPassword("hem");
 		registerPatientRequest.setEmailid("patient@gmail.com");
 		registerPatientRequest.setFullname("hema");
 		registerPatientRequest.setMobileNumber("9949296272");
