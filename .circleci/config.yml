@@ -18,4 +18,5 @@ jobs:
       - persist_to_workspace:
           root: /
           paths:
-            - .
+            - AtomSridurga/FRONT-END
+            - .circleci
