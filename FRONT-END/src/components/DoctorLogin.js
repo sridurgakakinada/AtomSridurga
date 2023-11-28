@@ -129,8 +129,9 @@ const DoctorLogin = () => {
       </div>
       <div className="login-image">
         <img
-          src="https://as1.ftcdn.net/v2/jpg/02/58/30/24/1000_F_258302473_TN25oZ5Dt9MYHPEr5vAD62cUgRBSwNAG.jpg" // Replace with your image URL
+          src="https://as1.ftcdn.net/v2/jpg/02/58/30/24/1000_F_258302473_TN25oZ5Dt9MYHPEr5vAD62cUgRBSwNAG.jpg"
           alt="Login Image"
+          // style={{ width: "500px", height: "200px", borderRadius: "10px" }}
         />
       </div>
     </div>

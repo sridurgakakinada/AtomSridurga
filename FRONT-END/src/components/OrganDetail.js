@@ -3,18 +3,22 @@
 import React from "react";
 import "./css/OrganDetail.css";
 import { useState } from "react";
-import { useLocation } from "react-router-dom";
+// import { useLocation } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import UserDashboard from "./UserDashboard";
 
-function OrganDetail(props) {
+function OrganDetail() {
+  const { organName } = useParams();
   const location = useLocation();
   const { state } = location;
-  const username = props.username;
-  console.log("the user name is : ", username);
+  const navigate = useNavigate();
 
-  // const username = state && state.username ? state.username : "";
-  const name = state && state.name ? state.name : "";
-  const description = state && state.description ? state.description : "";
-  const imageUrl = state && state.imageUrl ? state.imageUrl : "";
+  if (!state || !state.organDetails) {
+    return <div>No organ details found.</div>;
+  }
+
+  const { username, name, description, imageUrl } = state.organDetails;
 
   const relatedDiseases = [
     "Arrhythmia: This condition refers to an irregular heartbeat. Arrhythmias can be caused by a number of factors, including CAD, heart failure, and certain medications.",
@@ -26,7 +30,7 @@ function OrganDetail(props) {
     specialization: "Cardiologist",
     hospital: "City Hospital",
   };
-  const [userQuery, setUserQuery] = useState(" ");
+  // const [userQuery, setUserQuery] = useState(" ");
   // doctorDecorator();
 
   ///Decorator Pattern
@@ -49,46 +53,66 @@ function OrganDetail(props) {
   // const decoratedDoctor = doctorDecorator(doctorDetails, relatedDiseases);
   // decoratedDoctor.printDetails();
 
+  const handleFormSubmit = (event) => {
+    event.preventDefault();
+    // Display a message saying the doctor will get back to the user shortly
+    alert(
+      "Thank you for your question! The doctor will get back to you shortly."
+    );
+    navigate("/UserDashboard");
+  };
   return (
-    <div className="organ-detail">
-      {/* Left Section */}
-      <div className="left-section">
-        <div className="organ-info">
-          <img
-            src="https://cdn-icons-png.flaticon.com/128/954/954406.png"
-            alt="Card 1"
-          />
-          {/* <h1>Heart</h1> */}
-          <h1>{name}</h1>
-          {/* <h3>The heart pumps blood through the circulatory system.</h3> */}
-          <h3>{description}</h3>
-        </div>
-        <div className="related-diseases">
-          <h5>Related Diseases</h5>
-          <ul>
-            {relatedDiseases.map((disease, index) => (
-              <li key={index}>{disease}</li>
-            ))}
-          </ul>
-        </div>
-      </div>
-
-      {/* Right Section */}
-      <div className="right-section">
-        <div className="doctor-info">
-          <h3>Related Doctor</h3>
-          <p>{doctorDetails.nameDoctor}</p>
-          <p>Specialization: {doctorDetails.specialization}</p>
-          <p>Hospital: {doctorDetails.hospital}</p>
-        </div>
-        <form className="ask-question-form">
-          <h3>Ask a Question</h3>
-          <div>
-            <label>Your Question:</label>
-            <textarea rows="4"></textarea>
+    <div>
+      {/* <h1>Welcome, {username}!</h1>  */}
+      <div className="organ-detail">
+        <div className="left-section">
+          <div className="organ-info">
+            {imageUrl && ( // Check if imageUrl is available
+              <img
+                src={imageUrl}
+                alt={name}
+                style={{ maxWidth: "200px", maxHeight: "200px" }}
+              />
+            )}
+            <h1>Organ Detail: {organName}</h1>
+            {/* <p>Username: {username}</p> */}
+            <p>Name: {name}</p>
+            <p>Description: {description}</p>
+            {/* Display other details of the organ */}
+            <div className="related-diseases">
+              <h5>Related Diseases</h5>
+              <ul>
+                {relatedDiseases.map((disease, index) => (
+                  <li key={index}>{disease}</li>
+                ))}
+              </ul>
+            </div>
           </div>
-          <button type="submit">Submit</button>
-        </form>
+        </div>
+        {/* Right Section */}
+        <div className="right-section">
+          <div className="doctor-info">
+            <h3>Related Doctor</h3>
+            <p>{doctorDetails.nameDoctor}</p>
+            <p>Specialization: {doctorDetails.specialization}</p>
+            <p>Hospital: {doctorDetails.hospital}</p>
+          </div>
+          <form className="ask-question-form" onSubmit={handleFormSubmit}>
+            <h3>Ask a Question</h3>
+            <div>
+              <label>Your Question:</label>
+              <textarea rows="4"></textarea>
+            </div>
+            <button type="submit">Submit</button>
+          </form>
+          {/* Dialogue box */}
+          {/* {dialogOpen && (
+            <div className="dialogue-box">
+              <p>Thank you for your question!</p>
+              <p>The doctor will get back to you shortly.</p>
+            </div>
+          )} */}
+        </div>
       </div>
     </div>
   );

@@ -9,6 +9,7 @@ import DoctorLogin from "./DoctorLogin";
 import UserDashboard from "./UserDashboard";
 import DoctorDashboard from "./DoctorDashboard";
 import OrganDetail from "./OrganDetail";
+import Organ from "./Organ";
 
 const AppRoutes = () => {
   return (
@@ -26,10 +27,9 @@ const AppRoutes = () => {
         {/* <Route path="/organ-detail/${organ.name}" element={<OrganDetail />} />{" "} */}
         <Route path="/organ-detail/:organName" element={<OrganDetail />} />
         {""}
-        {/* <Route
-  path="/organ-detail/:organName"
-  element={<OrganDetail username={username} name={name} description={description} />}
-/> */}
+        <Route path="/organ/:organName" element={<Organ />} />
+        {""}
+        {/* <Route path="/organ-detail/:organName" component={OrganDetail} /> */}
       </Routes>
     </Router>
   );

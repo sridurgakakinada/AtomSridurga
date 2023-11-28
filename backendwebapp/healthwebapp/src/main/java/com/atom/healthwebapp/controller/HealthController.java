@@ -52,7 +52,6 @@ public class HealthController {
 		return apiResponse;
 	}
 	
-	
 	@PostMapping(path = "/Services/Health/SendQueryToDoctor", consumes = { 
 			MediaType.APPLICATION_JSON_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE,
 					 })

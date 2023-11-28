@@ -51,9 +51,9 @@ button {
     border-radius: 5px;
     cursor: pointer;
 }
-
 .login-image img {
     max-width: 100%;
-    height: auto;
+    height: 350px;
+    width:500px;
     border-radius: 10px;
-}
+} 

@@ -8,27 +8,31 @@ import UserDashboard from "./UserDashboard";
 function GetStarted() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [usertype, setUserType] = useState("patient");
   const [userError, setUserError] = useState("");
+  // const userType = "patient";
 
   const validateUsername = (username) => {
     console.log("in the validation methjod of User name");
+
     // const user=username;
     return username;
   };
   const navigate = useNavigate();
-
   const handleLogin = () => {
     if (!validateUsername(username)) {
       setUserError("");
       setUserError("Pleas eprovide the correct user name");
       return;
     }
+    // setUserType("patient");
 
     // Create an object with the user's credentials
     const userCredentials = {
       // email,
       username,
       password,
+      usertype,
     };
 
     // Send a POST request to the Java backend using fetch
@@ -41,7 +45,8 @@ function GetStarted() {
     })
       .then((response) => {
         if (response.ok) {
-          console.log("teh response is ok, the login was succesfull");
+          console.log("the user credentials are:", userCredentials);
+          console.log("the response is ok, the login was succesfull");
           navigate("/UserDashboard", { state: { username } });
           console.log("the response is: ", response);
 
@@ -52,9 +57,17 @@ function GetStarted() {
       })
       .then((data) => {
         // Handle the successful response, e.g., store user data or token
-        console.log("Login was successfull, maibu here", data);
-        if (data.message == null) {
-          console.log("the message was null");
+        if (
+          data.message === "Authentication Successful" &&
+          data.authCheck === true
+        ) {
+          console.log("Authentication Successful");
+          // Navigate to the UserDashboard only if authentication is successful
+          navigate("/UserDashboard", { state: { username } });
+        } else {
+          // Handle unsuccessful authentication
+          console.log("Authentication Failed");
+          // You may display an error message or handle it according to your requirement
         }
 
         // navigate("/UserDashboard");
@@ -73,7 +86,15 @@ function GetStarted() {
     <section className="vh-100">
       <div className="container-fluid h-custom">
         <div className="row d-flex justify-content-center align-items-center h-100">
-          <div className="col-md-9 col-lg-6 col-xl-5">{/* Your image */}</div>
+          <div className="col-md-9 col-lg-6 col-xl-5">
+            {/* Your image */}
+            <img
+              src="https://www.hayeslocums.com/wp-content/uploads/2023/03/Hayes-Locums-NationalDoctorsDay-1024x498.jpg.webp"
+              class="img-fluid"
+              alt="Sample image"
+              style={{ height: "100%", width: "100%" }}
+            />
+          </div>
           <div
             className="col-md-8 col-lg-6 col-xl-4 offset-xl-1 "
             style={{ marginTop: "80px" }}>

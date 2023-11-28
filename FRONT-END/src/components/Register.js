@@ -261,6 +261,11 @@ function Register() {
                         src="https://img.freepik.com/free-vector/health-professional-team-illustration_23-2148509384.jpg?w=2000"
                         class="img-fluid"
                         alt="Sample image"
+                        style={{
+                          width: "500px",
+                          height: "600px",
+                          borderRadius: "10px",
+                        }}
                       />
                     </div>
                   </div>

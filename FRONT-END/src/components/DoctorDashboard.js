@@ -103,8 +103,11 @@
 // export default DoctorDashboard;
 import React, { useState } from "react";
 import "./css/DoctorDashboard.css"; // Create a CSS file for styling
+import { useNavigate } from "react-router-dom";
 
 function DoctorDashboard() {
+  // const navigate = useNavigate();
+
   // Example data structure
   const patientsData = [
     {
@@ -128,6 +131,7 @@ function DoctorDashboard() {
 
   const [selectedPatient, setSelectedPatient] = useState(null);
   const [selectedQuery, setSelectedQuery] = useState(null);
+  const [answerSubmitted, setAnswerSubmitted] = useState(false);
 
   const handlePatientClick = (patient) => {
     setSelectedPatient(patient);
@@ -141,6 +145,7 @@ function DoctorDashboard() {
   const handleAnswerSubmit = (answer) => {
     // Handle submitting the answer to the backend or update state as needed
     console.log("Submitted Answer:", answer);
+    setAnswerSubmitted(true);
   };
 
   return (
@@ -150,7 +155,6 @@ function DoctorDashboard() {
       </div>
 
       <div className="doctor-dashboard">
-        
         {/* Available Patients List */}
         <div className="patients-list">
           <h2>Available Patients</h2>
@@ -195,6 +199,13 @@ function DoctorDashboard() {
                 <textarea id="answer" name="answer" rows="4" required />
                 <button type="submit">Submit Answer</button>
               </form>
+              {/* Dialog box to show the answer submission */}
+              {answerSubmitted && (
+                <div className="dialog-box">
+                  <p>Your answer has been submitted to the patient.</p>
+                  {/* You can add additional content or close button here */}
+                </div>
+              )}
             </>
           ) : (
             <p>Select a query to view details and post an answer.</p>
