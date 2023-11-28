@@ -121,6 +121,7 @@ const DoctorLogin = () => {
           </div>
           <button
             type="button"
+            placeholder="LoginButton"
             style={{ paddingLeft: "2.5rem", paddingRight: "2.5rem" }}
             onClick={handleLogin}>
             Login

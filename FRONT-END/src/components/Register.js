@@ -108,7 +108,7 @@ function Register() {
   };
 
   return (
-    <div>
+    <div>username
       <section class="vh-10" style={{ backgroundColor: "#90EE90" }}>
         <div class="container h-50">
           <div class="row d-flex justify-content-center align-items-center h-100">
@@ -127,7 +127,7 @@ function Register() {
                           <div class="form-outline flex-fill mb-0">
                             <input
                               type="text"
-                              // id="form3Example1c"
+                              id="usernameInput"
                               class="form-control"
                               name="username"
                               placeholder="Your userName"
@@ -148,8 +148,7 @@ function Register() {
                               // id="form3Example1c"
                               class="form-control"
                               name="fullname"
-                              placeholder="Your Full 
-                              Name"
+                              placeholder="Your Full Name"
                               value={formData.fullname}
                               onChange={handleChange}
                               required
@@ -223,6 +222,7 @@ function Register() {
                             <input
                               type="password"
                               // id="form3Example4cd"
+                              placeholder = "Repeat Password"
                               name="repeatpassword"
                               class="form-control"
                               value={formData.repeatpassword}
