@@ -13,7 +13,7 @@ jobs:
       - persist_to_workspace:
           root: /
           paths:
-            - FRONT-END
+            - AtomSridurga/FRONT-END
 
   test:
     docker:
