@@ -12,11 +12,12 @@ jobs:
       - run:
           name: Install Dependencies
           command: npm install
-      - run:
+      - run:                
           name: Build
           command: npm build
       - persist_to_workspace:
           root: /
           paths:
-            - AtomSridurga/FRONT-END
+            - FRONT-END
             - .circleci
+            
