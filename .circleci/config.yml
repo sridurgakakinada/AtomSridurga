@@ -15,9 +15,10 @@ jobs:
       - run:                
           name: Build
           command: npm build
-      - persist_to_workspace:
-          root: /
-          paths:
-            - FRONT-END
-            - .circleci
-            
+      - run :
+          name: Run code 
+          command : npm start
+      # - persist_to_workspace:
+      #     root: /
+      #     paths:
+      #       - .circleci
