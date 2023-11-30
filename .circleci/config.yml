@@ -7,17 +7,20 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Debug - List Contents Before Build
-          command: ls -R
-      - run:
           name: Install Dependencies
-          command: npm install
+          command: |
+            cd FRONT-END
+            npm install
       - run:                
           name: Build
-          command: npm build
+          command: |
+              cd FRONT-END
+              npm build
       - run :
           name: Run code 
-          command : npm start
+          command : 
+              cd FRONT-END
+              npm start
       # - persist_to_workspace:
       #     root: /
       #     paths:
