@@ -3,12 +3,13 @@
 import React from "react";
 import "./css/OrganDetail.css";
 import { useState } from "react";
-// import { useLocation } from "react-router-dom";
 import { useParams, useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import UserDashboard from "./UserDashboard";
 
 function OrganDetail() {
+  const [userQuery, setUserQuery] = useState(""); // State to hold user's query
+
   const { organName } = useParams();
   const location = useLocation();
   const { state } = location;
@@ -26,9 +27,9 @@ function OrganDetail() {
     "Heart failure: This condition occurs when the heart is unable to pump enough blood to meet the body's needs. Heart failure can be caused by a number of factors, including CAD, high blood pressure, and diabetes.",
   ];
   const doctorDetails = {
-    nameDoctor: "Dr. John Doe",
-    specialization: "Cardiologist",
-    hospital: "City Hospital",
+    nameDoctor: "doc-maibu",
+    // specialization: "Cardiologist",
+    // hospital: "City Hospital",
   };
   // const [userQuery, setUserQuery] = useState(" ");
   // doctorDecorator();
@@ -53,14 +54,53 @@ function OrganDetail() {
   // const decoratedDoctor = doctorDecorator(doctorDetails, relatedDiseases);
   // decoratedDoctor.printDetails();
 
-  const handleFormSubmit = (event) => {
+  // const handleFormSubmit = (event) => {
+  //   event.preventDefault();
+  //   // Display a message saying the doctor will get back to the user shortly
+  //   alert(
+  //     "Thank you for your question! The doctor will get back to you shortly."
+  //   );
+  //   navigate("/UserDashboard");
+  // };
+
+  const handleFormSubmit = async (event) => {
     event.preventDefault();
-    // Display a message saying the doctor will get back to the user shortly
-    alert(
-      "Thank you for your question! The doctor will get back to you shortly."
-    );
-    navigate("/UserDashboard");
+
+    try {
+      const queryData = {
+        username: "maibu",
+        patientId: "1",
+        patientName: "Mahaboob Pasha Mohammad	",
+        query: userQuery,
+        docDesignation: "MBBS",
+      };
+      console.log("this is the query data:", queryData);
+
+      const response = await fetch(
+        "http://localhost:8080/Services/Health/SendQueryToDoctor",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(queryData),
+        }
+      );
+
+      if (response.ok) {
+        alert(
+          "Thank you for your question! The doctor will get back to you shortly."
+        );
+        navigate("/UserDashboard");
+      } else {
+        throw new Error("Error sending query to the server");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("There was an error. Please try again later.");
+    }
   };
+
   return (
     <div>
       {/* <h1>Welcome, {username}!</h1>  */}
@@ -80,12 +120,12 @@ function OrganDetail() {
             <p>Description: {description}</p>
             {/* Display other details of the organ */}
             <div className="related-diseases">
-              <h5>Related Diseases</h5>
+              {/* <h5>Related Diseases</h5>
               <ul>
                 {relatedDiseases.map((disease, index) => (
                   <li key={index}>{disease}</li>
                 ))}
-              </ul>
+              </ul> */}
             </div>
           </div>
         </div>
@@ -94,24 +134,21 @@ function OrganDetail() {
           <div className="doctor-info">
             <h3>Related Doctor</h3>
             <p>{doctorDetails.nameDoctor}</p>
-            <p>Specialization: {doctorDetails.specialization}</p>
-            <p>Hospital: {doctorDetails.hospital}</p>
+            {/* <p>Specialization: {doctorDetails.specialization}</p>
+            <p>Hospital: {doctorDetails.hospital}</p> */}
           </div>
           <form className="ask-question-form" onSubmit={handleFormSubmit}>
             <h3>Ask a Question</h3>
             <div>
               <label>Your Question:</label>
-              <textarea rows="4"></textarea>
+              <textarea
+                rows="4"
+                value={userQuery}
+                onChange={(e) => setUserQuery(e.target.value)} // Update userQuery state as the user types
+              ></textarea>
             </div>
             <button type="submit">Submit</button>
           </form>
-          {/* Dialogue box */}
-          {/* {dialogOpen && (
-            <div className="dialogue-box">
-              <p>Thank you for your question!</p>
-              <p>The doctor will get back to you shortly.</p>
-            </div>
-          )} */}
         </div>
       </div>
     </div>

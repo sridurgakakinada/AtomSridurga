@@ -11,6 +11,7 @@ function Register() {
     phonenumber: "",
     password: "",
     repeatpassword: "",
+    patientHistory: "",
   });
   const navigate = useNavigate();
 
@@ -72,6 +73,7 @@ function Register() {
     const newUser = {
       username: formData.username,
       fullname: formData.fullname,
+      patientHistory: formData.patientHistory,
       emailid: formData.emailid,
       mobileNumber: formData.phonenumber,
       password: formData.password,
@@ -140,6 +142,66 @@ function Register() {
                             </label>
                           </div>
                         </div>
+                        {/* <div class="d-flex flex-row align-items-center mb-4">
+                          <i class="fas fa-user fa-lg me-3 fa-fw"></i>
+                          <div class="form-outline flex-fill mb-0">
+                            <input
+                              type="text"
+                              // id="form3Example1c"
+                              class="form-control"
+                              name="patientHistory"
+                              placeholder="History of diseases"
+                              value={formData.patientHistory}
+                              onChange={handleChange}
+                              required
+                            />
+                            <label class="form-label" for="form3Example1c">
+                              HISTORY OF DISEASES
+                            </label>
+                          </div>
+                        </div> */}
+                        <div class="d-flex flex-row align-items-center mb-4">
+                          <i class="fas fa-user fa-lg me-3 fa-fw"></i>
+                          <div class="form-outline flex-fill mb-0">
+                            <select
+                              class="form-select"
+                              name="patientHistory"
+                              value={formData.patientHistory}
+                              onChange={handleChange}
+                              required>
+                              <option value="" disabled selected>
+                                Select Disease
+                              </option>
+                              {/* <!-- Diseases related to organs --> */}
+                              {/* <optgroup label="Heart"> */}
+                              <option value="heart">Heart</option>
+                              <option value="eyes">EYES</option>
+                              <option value="eyes">BRAIN</option>
+                              <option value="eyes">SKIN</option>
+                              <option value="eyes">LIVER</option>
+                              <option value="eyes">BONES</option>
+                              <option value="eyes">LUNGS</option>
+                              <option value="eyes">DIGESTION</option>
+                              <option value="eyes">MUSCLES</option>
+                              {/* <!-- Add more heart-related diseases as needed --> */}
+                              {/* </optgroup> */}
+                              {/* <optgroup label="Lungs"> */}
+                              {/* <option value="lung_disease_1">
+                                  Lung Disease 1
+                                </option>
+                                <option value="lung_disease_2">
+                                  Lung Disease 2
+                                </option> */}
+                              {/* <!-- Add more lung-related diseases as needed --> */}
+                              {/* </optgroup> */}
+                              {/* <!-- Add other organs and their related diseases using <optgroup> and <option> --> */}
+                            </select>
+                            <label class="form-label" for="form3Example1c">
+                              HISTORY OF DISEASES
+                            </label>
+                          </div>
+                        </div>
+
                         <div class="d-flex flex-row align-items-center mb-4">
                           <i class="fas fa-user fa-lg me-3 fa-fw"></i>
                           <div class="form-outline flex-fill mb-0">

@@ -7,16 +7,21 @@ import NavBar from "./components/NavBar";
 import { DataProvider } from "./components/DataContext";
 // import UserDashboard from "./UserDashboard";
 // import OrganDetail from "./OrganDetail";
+import { DoctorAnswersProvider } from "./components/DoctorAnswersContext";
+import ChatBotIcon from "./components/ChatBotIcon";
+
 function App() {
   return (
     <div className="App">
       {/* Render the HomePage component */}
       {/* <Routes /> */}
       {/* Wrap your components with the DataProvider */}
-      <DataProvider>
+      <DoctorAnswersProvider>
         <NavBar />
+        <ChatBotIcon />
+
         <Routes />
-      </DataProvider>
+      </DoctorAnswersProvider>
 
       {/* Optionally, render the ChatBot component */}
       {/* <ChatBot /> */}
