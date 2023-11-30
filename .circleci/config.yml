@@ -20,7 +20,7 @@ jobs:
           name: Run code 
           command : 
               cd FRONT-END
-              npm start
+              npm test
       # - persist_to_workspace:
       #     root: /
       #     paths:
