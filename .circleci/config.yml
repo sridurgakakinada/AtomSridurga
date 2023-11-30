@@ -44,7 +44,7 @@ workflows:
   version: 2
   build_and_deploy:
     jobs:
-      - run_tests:
+      - run_tests
       - build_and_push:
           requires:
             - run_tests
