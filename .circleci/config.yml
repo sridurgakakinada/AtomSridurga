@@ -19,8 +19,7 @@ jobs:
       - run :
           name: Run code 
           command : 
-              cd FRONT-END
-              npm test
+              cd FRONT-END  &&   npm test
       # - persist_to_workspace:
       #     root: /
       #     paths:
