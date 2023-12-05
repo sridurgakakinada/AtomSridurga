@@ -2,18 +2,63 @@
 
 import React from "react";
 import "./css/OrganDetail.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams, useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import UserDashboard from "./UserDashboard";
 
 function OrganDetail() {
   const [userQuery, setUserQuery] = useState(""); // State to hold user's query
+  const [doctorList, setDoctorList] = useState([]);
+  const [patientList, setPatientList] = useState([]);
 
   const { organName } = useParams();
   const location = useLocation();
   const { state } = location;
   const navigate = useNavigate();
+  const [selectedDoctor, setSelectedDoctor] = useState(null); // State to track selected doctor
+  const [key, setKey] = useState(null);
+
+  useEffect(() => {
+    const fetchDoctorList = async () => {
+      try {
+        const response = await fetch(
+          "http://localhost:8080/Services/Health/getDoctorList"
+        );
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch");
+        }
+
+        const data = await response.json();
+        setDoctorList(data); // Assuming the response is an array of doctor details
+        // console.log("The data is : ", data);
+      } catch (error) {
+        console.error("Error fetching doctor list:", error);
+      }
+    };
+
+    const fetchPatientList = async () => {
+      try {
+        const response = await fetch(
+          "http://localhost:8080/Services/Health/getPatientList"
+        );
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch");
+        }
+
+        const data = await response.json();
+        setPatientList(data); // Assuming the response is an array of doctor details
+        // console.log("The data is : ", data);
+      } catch (error) {
+        console.error("Error fetching doctor list:", error);
+      }
+    };
+
+    fetchDoctorList();
+    fetchPatientList();
+  }, []);
 
   if (!state || !state.organDetails) {
     return <div>No organ details found.</div>;
@@ -28,9 +73,24 @@ function OrganDetail() {
   ];
   const doctorDetails = {
     nameDoctor: "doc-maibu",
-    // specialization: "Cardiologist",
-    // hospital: "City Hospital",
   };
+  // const setDoctor(doctor,key){
+  //   setSelectedDoctor(doctor.doctorName);
+  //   setKey(key);
+  // }
+  const setDoctor = (doctorData) => {
+    setSelectedDoctor(doctorData);
+    console.log("the selected doctor is :", doctorData.doctorName);
+
+    setKey(doctorData.key + 1);
+    console.log(
+      "teh doctor name is : ",
+      selectedDoctor,
+      "and the key is : ",
+      key
+    );
+  };
+
   // const [userQuery, setUserQuery] = useState(" ");
   // doctorDecorator();
 
@@ -133,11 +193,32 @@ function OrganDetail() {
         <div className="right-section">
           <div className="doctor-info">
             <h3>Related Doctor</h3>
-            <p>{doctorDetails.nameDoctor}</p>
+            {/* <p>{doctorDetails.nameDoctor}</p>  */}
+
+            {doctorList.map((doctor, index) => (
+              // <li key={index} onClick={() => setSelectedDoctor(doctor)}>
+              //   {/* {doctor.doctorName} */}
+              //   {organName === doctor.doctorDesignation
+              //     ? `${doctor.doctorName}`
+              //     : ""}
+              // </li>
+              <button className="doctor">
+                <li
+                  key={index}
+                  onClick={() =>
+                    setDoctor({ doctorName: doctor.doctorName, key: index })
+                  }>
+                  {organName === doctor.doctorDesignation
+                    ? `${doctor.doctorName}`
+                    : "No doctor is available at this moment"}
+                </li>
+              </button>
+            ))}
+
             {/* <p>Specialization: {doctorDetails.specialization}</p>
             <p>Hospital: {doctorDetails.hospital}</p> */}
           </div>
-          <form className="ask-question-form" onSubmit={handleFormSubmit}>
+          {/* <form className="ask-question-form" onSubmit={handleFormSubmit}>
             <h3>Ask a Question</h3>
             <div>
               <label>Your Question:</label>
@@ -148,7 +229,20 @@ function OrganDetail() {
               ></textarea>
             </div>
             <button type="submit">Submit</button>
-          </form>
+          </form> */}
+          {selectedDoctor && (
+            <form className="ask-question-form" onSubmit={handleFormSubmit}>
+              <h3>Ask a Question to {selectedDoctor.doctorName}</h3>
+              <div>
+                <label>Your Question:</label>
+                <textarea
+                  rows="4"
+                  value={userQuery}
+                  onChange={(e) => setUserQuery(e.target.value)}></textarea>
+              </div>
+              <button type="submit">Submit</button>
+            </form>
+          )}
         </div>
       </div>
     </div>

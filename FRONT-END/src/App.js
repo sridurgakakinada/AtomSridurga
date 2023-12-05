@@ -5,8 +5,7 @@ import ChatBot from "./components/ChatBot";
 import Routes from "./components/Routes";
 import NavBar from "./components/NavBar";
 import { DataProvider } from "./components/DataContext";
-// import UserDashboard from "./UserDashboard";
-// import OrganDetail from "./OrganDetail";
+
 import { DoctorAnswersProvider } from "./components/DoctorAnswersContext";
 import ChatBotIcon from "./components/ChatBotIcon";
 

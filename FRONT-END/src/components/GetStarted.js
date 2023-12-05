@@ -6,80 +6,118 @@ import { useNavigate } from "react-router-dom";
 import UserDashboard from "./UserDashboard";
 
 function GetStarted() {
-  const [username, setUsername] = useState("");
+  const [userName, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [usertype, setUserType] = useState("patient");
+  const [userType, setUserType] = useState("patient");
   const [userError, setUserError] = useState("");
-  // const userType = "patient";
 
   const validateUsername = (username) => {
     console.log("in the validation methjod of User name");
-
-    // const user=username;
     return username;
   };
   const navigate = useNavigate();
+
   const handleLogin = () => {
-    if (!validateUsername(username)) {
+    if (!validateUsername(userName)) {
       setUserError("");
-      setUserError("Pleas eprovide the correct user name");
+      setUserError("Please eprovide the correct user name");
       return;
     }
-    // setUserType("patient");
-
     // Create an object with the user's credentials
     const userCredentials = {
       // email,
-      username,
+      userName,
       password,
-      usertype,
+      userType,
     };
 
-    // Send a POST request to the Java backend using fetch
-    fetch("http://localhost:8080/Services/Health/AuthenticateUser", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(userCredentials),
-    })
-      .then((response) => {
-        if (response.ok) {
-          console.log("the user credentials are:", userCredentials);
-          console.log("the response is ok, the login was succesfull");
-          navigate("/UserDashboard", { state: { username } });
-          console.log("the response is: ", response);
+    const authenticateUser = async () => {
+      try {
+        const response = await fetch(
+          "http://localhost:8080/Services/Health/AuthenticateUser",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(userCredentials),
+          }
+        );
+        console.log("the user credentials are: ", userCredentials);
 
-          return response.json(); // Parse the response as JSON
-        } else {
+        if (!response.ok) {
           throw new Error("Login failed");
         }
-      })
-      .then((data) => {
-        // Handle the successful response, e.g., store user data or token
+
+        const data = await response.json();
+
+        console.log("the data is:", data);
+
         if (
           data.message === "Authentication Successful" &&
           data.authCheck === true
         ) {
           console.log("Authentication Successful");
-          // Navigate to the UserDashboard only if authentication is successful
-          navigate("/UserDashboard", { state: { username } });
+          navigate("/UserDashboard", { state: { userName } });
         } else {
-          // Handle unsuccessful authentication
           console.log("Authentication Failed");
-          // You may display an error message or handle it according to your requirement
+          console.log("the message is:", data.message);
+          console.log("the status is:", data.authCheck);
+          // Handle authentication failure according to your requirements
         }
 
-        // navigate("/UserDashboard");
-      })
-      .catch((error) => {
-        // Handle errors, e.g., show an error message
+        // Clear form fields or perform other actions after processing the response
+        setUsername("");
+        setPassword("");
+      } catch (error) {
+        // Handle errors, e.g., display an error message
+        alert("INVALID CREDENTAILS");
         console.error("Login failed:", error);
-      });
+      }
+    };
+    authenticateUser();
 
-    // setEmail("");
-    setUsername("");
-    setPassword("");
+    // Send a POST request to the Java backend using fetch
+    // fetch("http://localhost:8080/Services/Health/AuthenticateUser", {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify(userCredentials),
+    // })
+    //   .then((response) => {
+    //     if (response.ok) {
+    //       console.log("the response is ok");
+    //       console.log("the user credentials are:", userCredentials);
+
+    //       console.log("the response is: ", response);
+    //       return response.json(); // Parse the response as JSON
+    //     } else {
+    //       throw new Error("Login failed");
+    //     }
+    //   })
+    //   .then((data) => {
+    //     console.log("the data is : ", data);
+    //     if (
+    //       data.message === "Authentication Successful" &&
+    //       data.authCheck === true
+    //     ) {
+    //       console.log("Authentication Successful");
+    //       navigate("/UserDashboard", { state: { username } });
+    //     } else {
+    //       console.log("the message is :", data.message);
+    //       console.log("the status is :", data.authCheck);
+    //       console.log("Authentication Failed");
+    //     }
+    //   })
+    //   .catch((error) => {
+    //     // Handle errors, e.g., show an error message
+    //     console.error("Login failed:", error);
+    //   });
+
+    // // setEmail("");
+    // setUsername("");
+    // setPassword("");
   };
 
   return (
@@ -109,7 +147,7 @@ function GetStarted() {
                 }`}
                 placeholder="Enter a valid user name"
                 // value={email}
-                value={username}
+                value={userName}
                 // onChange={(e) => setEmail(e.target.value)}
                 onChange={(e) => setUsername(e.target.value)}
                 required
