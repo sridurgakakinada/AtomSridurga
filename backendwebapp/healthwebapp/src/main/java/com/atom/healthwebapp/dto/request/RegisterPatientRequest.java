@@ -8,8 +8,8 @@ public class RegisterPatientRequest {
 	private String emailid;
 	private String fullname;
 	private String mobileNumber;
+  private String patientHistory;
 
-	
 	
 	public String getUsername() {
 		return username;
@@ -49,6 +49,12 @@ public class RegisterPatientRequest {
 	}
 	public void setMobileNumber(String mobileNumber) {
 		this.mobileNumber = mobileNumber;
+	}
+	public String getPatientHistory() {
+		return patientHistory;
+	}
+	public void setPatientHistory(String patientHistory) {
+		this.patientHistory = patientHistory;
 	}
 	
 	

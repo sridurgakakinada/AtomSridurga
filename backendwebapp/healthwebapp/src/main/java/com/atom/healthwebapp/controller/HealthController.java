@@ -2,16 +2,24 @@ package com.atom.healthwebapp.controller;
 
 
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.*;
-
 import com.atom.healthwebapp.dto.request.AuthenticateRequest;
 import com.atom.healthwebapp.dto.request.RegisterPatientRequest;
 import com.atom.healthwebapp.dto.request.SaveDoctorReplyRequest;
 import com.atom.healthwebapp.dto.request.SendQueryToDocRequest;
 import com.atom.healthwebapp.dto.response.ApiResponse;
 import com.atom.healthwebapp.dto.response.AuthenticateResponse;
+import com.atom.healthwebapp.dto.response.DoctorResponse;
+import com.atom.healthwebapp.dto.response.PatientResponse;
 import com.atom.healthwebapp.dto.response.QueryListResponse;
 import com.atom.healthwebapp.service.HealthService;
 
@@ -42,6 +50,28 @@ public class HealthController {
 		return authenticateResponse;
 	}
 	
+	@PostMapping(path = "/Services/Health/getPatientDetails", consumes = { 
+			MediaType.APPLICATION_JSON_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE,
+					 })
+	@ResponseBody
+	public PatientResponse getPatientDetails(@RequestBody AuthenticateRequest authenticateRequest) {
+		PatientResponse patientResponse = healthService.getPatientDetails(authenticateRequest);
+		return patientResponse;
+	}
+	
+	
+	@PostMapping(path = "/Services/Health/getDoctorDetails", consumes = { 
+			MediaType.APPLICATION_JSON_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE,
+					 })
+	@ResponseBody
+	public DoctorResponse getDoctorDetails(@RequestBody AuthenticateRequest authenticateRequest) {
+		DoctorResponse doctorResponse = healthService.getDoctorDetails(authenticateRequest);
+		return doctorResponse;
+	}
+	
+	
+	
+	
 	@PostMapping(path = "/Services/Health/RegisterPatient", consumes = { 
 			MediaType.APPLICATION_JSON_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE,
 					 })
@@ -51,7 +81,6 @@ public class HealthController {
 		ApiResponse apiResponse = healthService.registerUserService(registerPatientRequest);
 		return apiResponse;
 	}
-	
 	
 	@PostMapping(path = "/Services/Health/SendQueryToDoctor", consumes = { 
 			MediaType.APPLICATION_JSON_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE,
@@ -88,5 +117,23 @@ public class HealthController {
 		QueryListResponse response = healthService.getDoctorReplyForPatientService(sendQueryToDocRequest);
 		return response;
 	}
+	
+	@GetMapping(path = "/Services/Health/getDoctorList", /*consumes = { 
+			MediaType.APPLICATION_JSON_VALUE },*/ produces = { MediaType.APPLICATION_JSON_VALUE})
+	@ResponseBody
+	public List<DoctorResponse> getDoctorList() {
+		List<DoctorResponse> doctorResponseList = healthService.getDoctorList();
+		return doctorResponseList;
+		
+	}
+	@GetMapping(path = "/Services/Health/getPatientList", /*consumes = { 
+			MediaType.APPLICATION_JSON_VALUE },*/ produces = { MediaType.APPLICATION_JSON_VALUE})
+	@ResponseBody
+	public List<PatientResponse> getPatientList() {
+		List<PatientResponse> patientResponseList = healthService.getPatientList();
+		return patientResponseList;
+		
+	}
+	
 
 }

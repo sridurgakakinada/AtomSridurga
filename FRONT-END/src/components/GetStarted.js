@@ -6,74 +6,133 @@ import { useNavigate } from "react-router-dom";
 import UserDashboard from "./UserDashboard";
 
 function GetStarted() {
-  const [username, setUsername] = useState("");
+  const [userName, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [userType, setUserType] = useState("patient");
   const [userError, setUserError] = useState("");
 
   const validateUsername = (username) => {
     console.log("in the validation methjod of User name");
-    // const user=username;
     return username;
   };
   const navigate = useNavigate();
 
   const handleLogin = () => {
-    if (!validateUsername(username)) {
+    if (!validateUsername(userName)) {
       setUserError("");
-      setUserError("Pleas eprovide the correct user name");
+      setUserError("Please eprovide the correct user name");
       return;
     }
-
     // Create an object with the user's credentials
     const userCredentials = {
       // email,
-      username,
+      userName,
       password,
+      userType,
     };
 
-    // Send a POST request to the Java backend using fetch
-    fetch("http://localhost:8080/Services/Health/AuthenticateUser", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(userCredentials),
-    })
-      .then((response) => {
-        if (response.ok) {
-          console.log("teh response is ok, the login was succesfull");
-          navigate("/UserDashboard", { state: { username } });
-          console.log("the response is: ", response);
+    const authenticateUser = async () => {
+      try {
+        const response = await fetch(
+          "http://localhost:8080/Services/Health/AuthenticateUser",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(userCredentials),
+          }
+        );
+        console.log("the user credentials are: ", userCredentials);
 
-          return response.json(); // Parse the response as JSON
-        } else {
+        if (!response.ok) {
           throw new Error("Login failed");
         }
-      })
-      .then((data) => {
-        // Handle the successful response, e.g., store user data or token
-        console.log("Login was successfull, maibu here", data);
-        if (data.message == null) {
-          console.log("the message was null");
+
+        const data = await response.json();
+
+        console.log("the data is:", data);
+
+        if (
+          data.message === "Authentication Successful" &&
+          data.authCheck === true
+        ) {
+          console.log("Authentication Successful");
+          navigate("/UserDashboard", { state: { userName } });
+        } else {
+          console.log("Authentication Failed");
+          console.log("the message is:", data.message);
+          console.log("the status is:", data.authCheck);
+          // Handle authentication failure according to your requirements
         }
 
-        // navigate("/UserDashboard");
-      })
-      .catch((error) => {
-        // Handle errors, e.g., show an error message
+        // Clear form fields or perform other actions after processing the response
+        setUsername("");
+        setPassword("");
+      } catch (error) {
+        // Handle errors, e.g., display an error message
+        alert("INVALID CREDENTAILS");
         console.error("Login failed:", error);
-      });
+      }
+    };
+    authenticateUser();
 
-    // setEmail("");
-    setUsername("");
-    setPassword("");
+    // Send a POST request to the Java backend using fetch
+    // fetch("http://localhost:8080/Services/Health/AuthenticateUser", {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify(userCredentials),
+    // })
+    //   .then((response) => {
+    //     if (response.ok) {
+    //       console.log("the response is ok");
+    //       console.log("the user credentials are:", userCredentials);
+
+    //       console.log("the response is: ", response);
+    //       return response.json(); // Parse the response as JSON
+    //     } else {
+    //       throw new Error("Login failed");
+    //     }
+    //   })
+    //   .then((data) => {
+    //     console.log("the data is : ", data);
+    //     if (
+    //       data.message === "Authentication Successful" &&
+    //       data.authCheck === true
+    //     ) {
+    //       console.log("Authentication Successful");
+    //       navigate("/UserDashboard", { state: { username } });
+    //     } else {
+    //       console.log("the message is :", data.message);
+    //       console.log("the status is :", data.authCheck);
+    //       console.log("Authentication Failed");
+    //     }
+    //   })
+    //   .catch((error) => {
+    //     // Handle errors, e.g., show an error message
+    //     console.error("Login failed:", error);
+    //   });
+
+    // // setEmail("");
+    // setUsername("");
+    // setPassword("");
   };
 
   return (
     <section className="vh-100">
       <div className="container-fluid h-custom">
         <div className="row d-flex justify-content-center align-items-center h-100">
-          <div className="col-md-9 col-lg-6 col-xl-5">{/* Your image */}</div>
+          <div className="col-md-9 col-lg-6 col-xl-5">
+            {/* Your image */}
+            <img
+              src="https://www.hayeslocums.com/wp-content/uploads/2023/03/Hayes-Locums-NationalDoctorsDay-1024x498.jpg.webp"
+              class="img-fluid"
+              alt="Sample image"
+              style={{ height: "100%", width: "100%" }}
+            />
+          </div>
           <div
             className="col-md-8 col-lg-6 col-xl-4 offset-xl-1 "
             style={{ marginTop: "80px" }}>
@@ -88,7 +147,7 @@ function GetStarted() {
                 }`}
                 placeholder="Enter a valid user name"
                 // value={email}
-                value={username}
+                value={userName}
                 // onChange={(e) => setEmail(e.target.value)}
                 onChange={(e) => setUsername(e.target.value)}
                 required
