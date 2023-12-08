@@ -2,6 +2,8 @@ import logo from "./logo.svg";
 import "./App.css";
 import HomePage from "./components/HomePage";
 import ChatBot from "./components/ChatBot";
+import MyChatBot from "./components/MyChatBot";
+
 import Routes from "./components/Routes";
 import NavBar from "./components/NavBar";
 import { DataProvider } from "./components/DataContext";
@@ -17,8 +19,8 @@ function App() {
       {/* Wrap your components with the DataProvider */}
       <DoctorAnswersProvider>
         <NavBar />
-        <ChatBotIcon />
-
+        {/* <ChatBotIcon /> */}
+        <MyChatBot/>
         <Routes />
       </DoctorAnswersProvider>
 
