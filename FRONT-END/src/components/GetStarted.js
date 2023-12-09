@@ -10,9 +10,11 @@ function GetStarted() {
   const [password, setPassword] = useState("");
   const [userType, setUserType] = useState("patient");
   const [userError, setUserError] = useState("");
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
 
   const validateUsername = (username) => {
-    console.log("in the validation methjod of User name");
+    // console.log("in the validation methjod of User name");
     return username;
   };
   const navigate = useNavigate();
@@ -22,6 +24,9 @@ function GetStarted() {
       setUserError("");
       setUserError("Please eprovide the correct user name");
       return;
+    }
+    if (userName && password) {
+      setIsLoggedIn(true);
     }
     // Create an object with the user's credentials
     const userCredentials = {
@@ -51,19 +56,12 @@ function GetStarted() {
 
         const data = await response.json();
 
-        console.log("the data is:", data);
-
-        if (
-          data.message === "Authentication Successful" &&
-          data.authCheck === true
-        ) {
-          console.log("Authentication Successful");
-          navigate("/UserDashboard", { state: { userName } });
+        if (data.message === "Authentication Successful" && data.authCheck === true) {
+          setIsLoggedIn(true);
+          console.log("the login is successfull")
+          navigate("/UserDashboard", { state: { userName } }); // Passing userName to UserDashboard
         } else {
-          console.log("Authentication Failed");
-          console.log("the message is:", data.message);
-          console.log("the status is:", data.authCheck);
-          // Handle authentication failure according to your requirements
+          setIsLoggedIn(false);
         }
 
         // Clear form fields or perform other actions after processing the response
@@ -72,58 +70,18 @@ function GetStarted() {
       } catch (error) {
         // Handle errors, e.g., display an error message
         alert("INVALID CREDENTAILS");
-        console.error("Login failed:", error);
       }
     };
     authenticateUser();
 
-    // Send a POST request to the Java backend using fetch
-    // fetch("http://localhost:8080/Services/Health/AuthenticateUser", {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify(userCredentials),
-    // })
-    //   .then((response) => {
-    //     if (response.ok) {
-    //       console.log("the response is ok");
-    //       console.log("the user credentials are:", userCredentials);
-
-    //       console.log("the response is: ", response);
-    //       return response.json(); // Parse the response as JSON
-    //     } else {
-    //       throw new Error("Login failed");
-    //     }
-    //   })
-    //   .then((data) => {
-    //     console.log("the data is : ", data);
-    //     if (
-    //       data.message === "Authentication Successful" &&
-    //       data.authCheck === true
-    //     ) {
-    //       console.log("Authentication Successful");
-    //       navigate("/UserDashboard", { state: { username } });
-    //     } else {
-    //       console.log("the message is :", data.message);
-    //       console.log("the status is :", data.authCheck);
-    //       console.log("Authentication Failed");
-    //     }
-    //   })
-    //   .catch((error) => {
-    //     // Handle errors, e.g., show an error message
-    //     console.error("Login failed:", error);
-    //   });
-
-    // // setEmail("");
-    // setUsername("");
-    // setPassword("");
+    
   };
 
   return (
     <section className="vh-100">
       <div className="container-fluid h-custom">
         <div className="row d-flex justify-content-center align-items-center h-100">
+        <h1></h1>
           <div className="col-md-9 col-lg-6 col-xl-5">
             {/* Your image */}
             <img
@@ -138,22 +96,17 @@ function GetStarted() {
             style={{ marginTop: "80px" }}>
             <div className="form-outline mb-4">
               <input
-                // type="email"
                 type="text"
                 id="form3Example3"
                 className={`form-control form-control-lg ${
-                  // emailError ? "is-invalid" : ""
                   userError ? "is-invalid" : ""
                 }`}
                 placeholder="Enter a valid user name"
-                // value={email}
                 value={userName}
-                // onChange={(e) => setEmail(e.target.value)}
                 onChange={(e) => setUsername(e.target.value)}
                 required
               />
               <label className="form-label" htmlFor="form3Example3">
-                {/* Email address */}
                 USER NAME
               </label>
 

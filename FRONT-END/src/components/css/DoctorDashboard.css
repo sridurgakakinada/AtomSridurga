@@ -1,19 +1,27 @@
+
+.divDoctor{
+    min-height: 100vh;
+    background-color: 	#C0C0C0;
+}
+
 .doctor-dashboard {
     display: flex;
     justify-content: space-around;
     margin: 20px;
+    /* height: 80vh; */
+    background-color:#C0C0C0;
 }
 
 .patients-list,
 .queries-list,
 .query-details {
+    background-color: #fff;
     border: 1px solid #ddd;
     padding: 10px;
     margin: 10px;
     border-radius: 8px;
     width: 30%;
 }
-
 .patients-list h2,
 .queries-list h2,
 .query-details h2 {

@@ -17,8 +17,7 @@ function App() {
       {/* Wrap your components with the DataProvider */}
       <DoctorAnswersProvider>
         <NavBar />
-        <ChatBotIcon />
-
+        {/* <ChatBotIcon /> */}
         <Routes />
       </DoctorAnswersProvider>
 

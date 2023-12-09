@@ -5,18 +5,32 @@
   padding: 20px;
   justify-content: space-around;
   align-content: start;
+  background-color: 	#C0C0C0;
 }
 
 .dashboard-card {
-  border: 1px solid #ccc;
   border-radius: 8px;
   padding: 20px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .dashboard-card img {
   max-width: 100%;
   height: auto;
+  transition: transform 0.3s ease;
 }
+.dashboard-card img:hover{
+  transform: scale(1.4);
+}
+
 
 .card-content {
   text-align: center;
@@ -31,4 +45,64 @@
   text-decoration-style: wavy;
   font-weight: bolder;
   color: red;
+}
+.notification-container {
+  /* width: 200px; */
+  position: fixed; /* Set the parent container to fixed */
+  top: 20px; /* Adjust as needed for vertical position */
+  right: 20px; /* Adjust as needed for horizontal position */
+  z-index: 1000; /* Ensure the icon stays above other elements */
+  background-color: #4caf50;
+}
+.notification-icon {
+  position: fixed; /* Set the icon position */
+  z-index: 1000;
+  cursor: pointer;
+}
+.close-btn {
+  position: absolute;
+  top:-10px;
+  left: 100px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 24px;
+  color: red; 
+}
+.close-btn:hover {
+  background: none;
+  border: none;
+  outline: none;
+}
+.notification-icon.hide {
+  display: none; /* Hide the icon when the details are shown */
+}
+  .doctor-image {
+    width: 100px; /* Set width as needed */
+    height: 100px; /* Set height as needed */
+  }
+
+.notification-details {
+  position: absolute; /* Set the details position */
+  top: 50px; /* Adjust based on the height of the icon */
+  left: 10px; /* Position the details to the left of the icon */
+  background-color: #fff;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  display: none; /* Initially hidden */
+  z-index: 999; /* Ensure the details section stays above other elements */
+}
+.notification-details h2 {
+  margin-bottom: 10px;
+  font-size: 16px;
+  color: #333;
+}
+.notification-details.show {
+  /* position: relative; */
+  display: block /* Show details when the show class is present */
+}
+.notification-icon.hide {
+  display: none; /* Hide the icon when the details are shown */
 }
