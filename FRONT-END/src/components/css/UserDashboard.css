@@ -83,6 +83,7 @@
   }
 
 .notification-details {
+  width: 250px;
   position: absolute; /* Set the details position */
   top: 50px; /* Adjust based on the height of the icon */
   left: 10px; /* Position the details to the left of the icon */

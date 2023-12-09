@@ -135,9 +135,11 @@ function OrganDetail() {
 
   return (
     <div className="div1">
+              <h1> {userName} dashboard </h1>
 
-      <h1>{username}</h1>
-      
+
+      {/* <h1>{username}</h1> */}
+
       <div className="organ-detail">
         
         {/* <h1>{patientList[0][0]}</h1> */}
