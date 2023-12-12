@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+  backend:
+    #image: openjdk:14
+    image: backend_image
+    # build:
+    #   context: ./backendwebapp
+    #   dockerfile: Dockerfile.backend
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:h2:mem:health
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.h2.Driver
+      SPRING_DATASOURCE_USERNAME: sa
+      SPRING_DATASOURCE_PASSWORD:
+      SPRING_H2_CONSOLE_ENABLED: "true"
+      SPRING_H2_CONSOLE_PATH: /h2-console
+
+  frontend:
+    #image: node:14
+    image: frontend_image_name
+    # build:
+    #   context: ./FRONT-END
+    #   dockerfile: Dockerfile
+
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend

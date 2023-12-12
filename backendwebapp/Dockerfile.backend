@@ -1,0 +1,16 @@
+# Use an official OpenJDK image as the base image
+# FROM openjdk:14
+FROM openjdk:17-jdk-alpine
+
+
+# Set the working directory
+WORKDIR /usr/src/app
+
+# Copy the JAR file into the container
+COPY healthwebapp/target/healthwebapp-0.0.1-SNAPSHOT.jar ./
+
+# Expose the port on which the application runs
+EXPOSE 8080
+
+# Command to run the application
+CMD ["java", "-jar", "healthwebapp-0.0.1-SNAPSHOT.jar"]

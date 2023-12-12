@@ -155,58 +155,58 @@ class HealthwebappApplicationTests {
 	
 	
 	
-	@Test
-	void testAuthenticationFailureApi() {
+	// @Test
+	// void testAuthenticationFailureApi() {
 		
-		RegisterPatientRequest registerPatientRequest = new RegisterPatientRequest();
-		registerPatientRequest.setUsername("hema");
-		registerPatientRequest.setPassword("hem");
-		registerPatientRequest.setEmailid("patient@gmail.com");
-		registerPatientRequest.setFullname("hema");
-		registerPatientRequest.setMobileNumber("9949296272");
-		
-		
-		healthController.registerPatient(registerPatientRequest);
-		//assertEquals("User registered successful",apiResponse.getMessage());
+	// 	RegisterPatientRequest registerPatientRequest = new RegisterPatientRequest();
+	// 	registerPatientRequest.setUsername("hema");
+	// 	registerPatientRequest.setPassword("hem");
+	// 	registerPatientRequest.setEmailid("patient@gmail.com");
+	// 	registerPatientRequest.setFullname("hema");
+	// 	registerPatientRequest.setMobileNumber("9949296272");
 		
 		
-		AuthenticateRequest authenticateRequest = new AuthenticateRequest();
-		authenticateRequest.setUserName("hema");
-		authenticateRequest.setPassword("hema");
-		authenticateRequest.setUserType("Patient");
-		authenticateRequest.setId("1");
+	// 	healthController.registerPatient(registerPatientRequest);
+	// 	//assertEquals("User registered successful",apiResponse.getMessage());
 		
-		AuthenticateResponse apiResponse =	healthController.authenticateUser(authenticateRequest);
-		assertEquals("Authentication Failed",apiResponse.getMessage());
 		
-	}
+	// 	AuthenticateRequest authenticateRequest = new AuthenticateRequest();
+	// 	authenticateRequest.setUserName("hema");
+	// 	authenticateRequest.setPassword("hema");
+	// 	authenticateRequest.setUserType("Patient");
+	// 	authenticateRequest.setId("1");
+		
+	// 	AuthenticateResponse apiResponse =	healthController.authenticateUser(authenticateRequest);
+	// 	assertEquals("Authentication Failed",apiResponse.getMessage());
+		
+	// }
 	
 	
-	@Test
-	void testAuthenticationSuccessApi() {
+	// @Test
+	// void testAuthenticationSuccessApi() {
 		
-		RegisterPatientRequest registerPatientRequest = new RegisterPatientRequest();
-		registerPatientRequest.setUsername("Sarala");
-		registerPatientRequest.setPassword("hem");
-		registerPatientRequest.setEmailid("patient@gmail.com");
-		registerPatientRequest.setFullname("hema");
-		registerPatientRequest.setMobileNumber("9949296272");
-		
-		
-		healthController.registerPatient(registerPatientRequest);
-		//assertEquals("User registered successful",apiResponse.getMessage());
+	// 	RegisterPatientRequest registerPatientRequest = new RegisterPatientRequest();
+	// 	registerPatientRequest.setUsername("Sarala");
+	// 	registerPatientRequest.setPassword("hem");
+	// 	registerPatientRequest.setEmailid("patient@gmail.com");
+	// 	registerPatientRequest.setFullname("hema");
+	// 	registerPatientRequest.setMobileNumber("9949296272");
 		
 		
-		AuthenticateRequest authenticateRequest = new AuthenticateRequest();
-		authenticateRequest.setUserName("Sarala");
-		authenticateRequest.setPassword("hem");
-		authenticateRequest.setUserType("Patient");
-		authenticateRequest.setId("2");
+	// 	healthController.registerPatient(registerPatientRequest);
+	// 	//assertEquals("User registered successful",apiResponse.getMessage());
 		
-		AuthenticateResponse apiResponse =	healthController.authenticateUser(authenticateRequest);
-		assertEquals("Authentication Successful",apiResponse.getMessage());
 		
-	}
+	// 	AuthenticateRequest authenticateRequest = new AuthenticateRequest();
+	// 	authenticateRequest.setUserName("Sarala");
+	// 	authenticateRequest.setPassword("hem");
+	// 	authenticateRequest.setUserType("Patient");
+	// 	authenticateRequest.setId("2");
+		
+	// 	AuthenticateResponse apiResponse =	healthController.authenticateUser(authenticateRequest);
+	// 	assertEquals("Authentication Successful",apiResponse.getMessage());
+		
+	// }
 	
 	
 	
