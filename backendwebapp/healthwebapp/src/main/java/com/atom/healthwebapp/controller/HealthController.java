@@ -34,6 +34,7 @@ import com.atom.healthwebapp.service.HealthService;
 
 @RestController
 //@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin
 public class HealthController {
 	
 	@Autowired
@@ -54,6 +55,7 @@ public class HealthController {
 			MediaType.APPLICATION_JSON_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE,
 					 })
 	@ResponseBody
+	@CrossOrigin(origins = "http://localhost:3000")
 	public PatientResponse getPatientDetails(@RequestBody AuthenticateRequest authenticateRequest) {
 		PatientResponse patientResponse = healthService.getPatientDetails(authenticateRequest);
 		return patientResponse;
@@ -64,6 +66,7 @@ public class HealthController {
 			MediaType.APPLICATION_JSON_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE,
 					 })
 	@ResponseBody
+	@CrossOrigin(origins = "http://localhost:3000")
 	public DoctorResponse getDoctorDetails(@RequestBody AuthenticateRequest authenticateRequest) {
 		DoctorResponse doctorResponse = healthService.getDoctorDetails(authenticateRequest);
 		return doctorResponse;

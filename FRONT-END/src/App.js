@@ -19,11 +19,9 @@ function App() {
       {/* Wrap your components with the DataProvider */}
       <DoctorAnswersProvider>
         <NavBar />
-        {/* <ChatBotIcon /> */}
         <MyChatBot/>
         <Routes />
       </DoctorAnswersProvider>
-
       {/* Optionally, render the ChatBot component */}
       {/* <ChatBot /> */}
     </div>

@@ -1,85 +1,122 @@
 import React, { useState } from "react";
 import "./css/DoctorLogin.css";
-// Import your CSS file for styling
-// import { Link } from "react-router-dom";
-// import { useHistory } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+
+import { useNavigate} from "react-router-dom";
 import DoctorDashboard from "./DoctorDashboard";
+import { useEffect } from "react";
 
 const DoctorLogin = () => {
-  // const [email, setEmail] = useState("");
-  const [username, setUsername] = useState("");
+  const [userName, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  // const [emailError, setEmailError] = useState("");
   const [userError, setUserError] = useState("");
-
-  // const validateEmail = (email) => {
-  //   console.log("in this validate email function");
-  //   const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  //   return regex.test(email);
-  // };
-  const validateUsername = (username) => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userType, setUserType] = useState("doctor");
+  const [doctorList, setDoctorList] = useState([]);
+  const [key1, setKey1] = useState(null);
+ 
+  const validateUsername = (userName) => {
     console.log("in the validation methjod of User name");
-    // const user=username;
-    return username;
+    return userName;
+
   };
   const navigate = useNavigate();
 
-  const handleLogin = () => {
-    // setEmailError("");
+  // useEffect(() => {
+  //   const fetchDoctorList = async () => {
+  //     try {
+  //       const response = await fetch(
+  //         "http://localhost:8080/Services/Health/getDoctorList"
+  //       );
 
-    // // if (!validateEmail(email)) {
-    //   setEmailError("Please enter a valid email address.");
+  //       if (!response.ok) {
+  //         throw new Error("Failed to fetch");
+  //       }
 
-    //   return;
-    // }
-    if (!validateUsername(username)) {
-      setUserError("");
-      setUserError("Pleas eprovide the correct user name");
+  //       const data = await response.json();
+  //       setDoctorList(data); 
+       
+  //     } catch (error) {
+  //       console.error("Error fetching doctor list:", error);
+  //     }
+  //   };
+
+
+  //   fetchDoctorList();
+  // }, []); 
+  const handleLogin = async () => {
+    if (!validateUsername(userName)) {
+      setUserError("Please provide the correct username");
       return;
     }
-
-    // Create an object with the user's credentials
-    const userCredentials = {
-      // email,
-      username,
-      password,
-    };
-
-    // Send a POST request to the Java backend using fetch
-    fetch("http://localhost:8080/Services/Health/AuthenticateUser", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(userCredentials),
-    })
-      .then((response) => {
-        if (response.ok) {
-          return response.json(); // Parse the response as JSON
-        } else {
-          throw new Error("Login failed");
+  
+    if (userName && password) {
+      try {
+        const response = await fetch(
+          "http://localhost:8080/Services/Health/getDoctorList"
+        );
+  
+        if (!response.ok) {
+          throw new Error("Failed to fetch doctor list");
         }
-      })
-      .then((data) => {
-        // Handle the successful response, e.g., store user data or token
-        console.log("Login was successful", data);
-        navigate("/DoctorDashboard");
-
-        // You can redirect to another component after successful login if needed.
-        // For example, using React Router:
-        // history.push("/dashboard"); // Make sure to import useHistory from 'react-router-dom' and configure your routes
-      })
-      .catch((error) => {
-        // Handle errors, e.g., show an error message
-        console.error("Login failed:", error);
-      });
-
-    // setEmail("");
-    setUsername("");
-    setPassword("");
+  
+        const data = await response.json();
+        setDoctorList(data);
+  
+        const foundDoctor = data.find((doctor) => doctor.doctorName === userName);
+  
+        if (foundDoctor) {
+          const index = data.indexOf(foundDoctor) + 1;
+          setKey1(index);
+          console.log(index);
+  
+          const userCredentials = {
+            userName,
+            password,
+            userType,
+            id: index // Use the updated index value directly
+          };
+          console.log(userCredentials);
+  
+          const authResponse = await fetch(
+            "http://localhost:8080/Services/Health/AuthenticateUser",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json"
+              },
+              body: JSON.stringify(userCredentials)
+            }
+          );
+  
+          if (authResponse.ok) {
+            const responseData = await authResponse.json();
+            if (
+              responseData.message === "Authentication Successful" &&
+              responseData.authCheck === true
+            ) {
+              setIsLoggedIn(true);
+              navigate("/DoctorDashboard", { state: { userName } });
+            } else {
+              setIsLoggedIn(false);
+              // Handle authentication failure
+            }
+          } else {
+            throw new Error("Authentication failed");
+          }
+  
+          setUsername("");
+          setPassword("");
+        } else {
+          // Handle case when the username is not found
+          console.log("Doctor username not found");
+        }
+      } catch (error) {
+        console.error("Error during login:", error);
+        alert("Login failed");
+      }
+    }
   };
-
+  
   return (
     <div className="login-container">
       <div className="login-form">
@@ -96,7 +133,7 @@ const DoctorLogin = () => {
               }`}
               placeholder="Enter a valid user name"
               // value={email}
-              value={username}
+              value={userName}
               // onChange={(e) => setEmail(e.target.value)}
               onChange={(e) => setUsername(e.target.value)}
               required

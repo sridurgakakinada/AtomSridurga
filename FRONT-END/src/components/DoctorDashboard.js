@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./css/DoctorDashboard.css"; // Create a CSS file for styling
-import { useNavigate } from "react-router-dom";
+import {useLocation, useNavigate } from "react-router-dom";
 import { useDoctorAnswers } from "./DoctorAnswersContext";
 
 function DoctorDashboard() {
@@ -11,37 +11,47 @@ function DoctorDashboard() {
 
   const [answerSubmitted, setAnswerSubmitted] = useState(false);
   const [answerDatabase, setAnswerDatabase] = useState("");
-  const navigate = useNavigate();
-
   const [patientsData, setPatientsData] = useState([]);
   const [queriesData, setQueriesData] = useState([]);
-
-  // // Example data structure
-  // const patientsData = [
-  //   {
-  //     id: 1,
-  //     name: "John Doe",
-  //     queries: [
-  //       { id: 1, question: "How can I improve my health?" },
-  //       { id: 2, question: "What should I do to reduce stress?" },
-  //     ],
-  //   },
-  //   {
-  //     id: 2,
-  //     name: "Jane Smith",
-  //     queries: [
-  //       { id: 3, question: "Is my diet plan suitable for my condition?" },
-  //       { id: 4, question: "What exercises can I do for back pain?" },
-  //     ],
-  //   },
-  //   // Add more patient data as needed
-  // ];
+  const location = useLocation();
+  const navigate = useNavigate();
+  const { userName } = location.state;
+  const [id, setId] = useState(null);
+  const [questionID,setQuestionID]=useState(null);
+  const [doctorList, setDoctorList] = useState([]);
+  const[docdesignation,setDoctorDesignation]=useState("");
 
   useEffect(() => {
     // Fetch patient list from the server when the component mounts
     fetchPatients();
     fetchQueries();
+    fetchDoctorList();
   }, []); // Empty dependency array to run the effect only once
+
+    const fetchDoctorList = async () => {
+      try {
+        const response = await fetch(
+          "http://localhost:8080/Services/Health/getDoctorList"
+        );
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch");
+        }
+
+        const data = await response.json();
+        // console.log(data);
+        data.map((doctor,index)=>{
+          if(doctor.doctorName==userName){
+            setDoctorDesignation(doctor.doctorDesignation);
+          }
+        })
+        
+        setDoctorList(data); 
+       
+      } catch (error) {
+        console.error("Error fetching doctor list:", error);
+      }
+    };
 
   const fetchPatients = async () => {
     try {
@@ -51,7 +61,15 @@ function DoctorDashboard() {
       if (response.ok) {
         const data = await response.json();
         console.log(data);
+
         setPatientsData(data); // Set the retrieved patient list in state
+        data.forEach((patient1, index) => {
+          if (patient1.username === userName) {
+            setId(index + 1);
+            console.log("the ID is: ", index + 1);
+            console.log("the full name is: ", patient1.username);
+          }
+        });
       } else {
         throw new Error("Failed to fetch patient list");
       }
@@ -61,16 +79,6 @@ function DoctorDashboard() {
     }
   };
 
-  // const handlePatientClick = (patient) => {
-  //   setSelectedPatient(patient);
-  //   setSelectedQuery(null); // Clear selected query when selecting a new patient
-  //   console.log("Selected Patient:", selectedPatient);
-  // };
-  // const handlePatientClick = (patient) => {
-  //   setSelectedPatient(patient);
-  //   setSelectedQuery(null);
-  //   console.log("Selected Patient:", selectedPatient);
-  // };
 
   const fetchQueries = async () => {
     try {
@@ -82,15 +90,15 @@ function DoctorDashboard() {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            userName: "doc",
-            id: "1",
+            userName: userName,
+            id: 1,
           }),
         }
       );
       if (response.ok) {
         const data = await response.json();
-        // console.log(data);
         setQueriesData(data);
+        console.log(data);
       } else {
         throw new Error("Failed to fetch queries");
       }
@@ -109,16 +117,16 @@ function DoctorDashboard() {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            username: "doc",
-            id: "1",
+            username: userName,
+            id: id,
             docreply: answerDatabase,
-            questionid: "1",
+            questionid: questionID,
           }),
         }
       );
       if (response.ok) {
         const data = await response.json();
-        // console.log(data);
+        console.log(data);
         setQueriesData(data);
       } else {
         throw new Error("Failed to fetch queries");
@@ -127,16 +135,24 @@ function DoctorDashboard() {
       console.error("Error:", error);
     }
   };
-
   const handlePatientClick = (patient) => {
     setSelectedPatient(patient);
-
     setSelectedQuery(null);
+    console.log(patientsData);
+    patientsData.forEach((patient1, index) => {
+      if (patient1.username === patient.username) {
+        setId(index + 1);
+        // console.log("the ID is: ", index + 1);
+        // console.log("the full name is: ", patient1.username);
+      }
+    });
 
     const matchingQuery =
       queriesData["queryList"]["0"].patientDetails.fullname ===
       patient.patientName;
     console.log(matchingQuery);
+    console.log(queriesData["queryList"]["0"].questionId);
+    setQuestionID(queriesData["queryList"]["0"].questionId);
 
     if (matchingQuery) {
       setSelectedQuery(queriesData["queryList"]["0"]);
@@ -161,22 +177,26 @@ function DoctorDashboard() {
   };
 
   return (
-    <div>
+    <div className="divDoctor">
       <div>
-        <h1>Doctor Dashboard</h1>
+        <h1>Doctor {userName} Dashboard </h1>
+        {/* <h2 style={{textAlign: 'center'}}>{userName}</h2> */}
       </div>
 
       <div className="doctor-dashboard">
-        {/* Available Patients List */}
+
+        
         <div className="patients-list">
           <h2>Available Patients</h2>
           <ul>
-            {patientsData.map((patient, index) => (
+          {patientsData
+            .filter((patient) => patient.patientHealthHistory === docdesignation) // Filter patients based on matching doctor designation
+            .map((patient, index) => (
               <li key={index} onClick={() => handlePatientClick(patient)}>
                 {patient.patientName}
               </li>
             ))}
-          </ul>
+        </ul>
         </div>
         {/* Selected Patient's Queries */}
         {/* <div className="queries-list">

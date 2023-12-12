@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-// import "./css/UserDashboard.css"; // Make sure to create the corresponding CSS file
 
 import "./css/UserDashboard.css";
 import { Link } from "react-router-dom";
@@ -8,22 +7,22 @@ import { Button } from "bootstrap";
 import { useNavigate } from "react-router-dom";
 import { useDoctorAnswers } from "./DoctorAnswersContext";
 
-function UserDashboard(props) {
-  // If you receive props from a parent component
-  // Ensure receivedProps are defined from the props received
-  const { receivedProps } = props;
-  const { doctorAnswers } = useDoctorAnswers();
-
+function UserDashboard() {
   const [doctorReplies, setDoctorReplies] = useState(false);
   const [doctorList, setDoctorList] = useState([]);
-
-  // const [userName, setUsername] = useState("");
+  const [patientList, setPatientList] = useState([]);
   const location = useLocation();
-  const { state } = location;
-  const username = state && state.username ? state.username : "";
-  console.log("the user name is : ", username);
   const navigate = useNavigate();
-
+  const [id, setId] = useState(null);
+  const { userName } = location.state;
+  const [showDetails, setShowDetails] = useState(false);
+  const handleNotificationClick = () => {
+    console.log("the notification button was clicked");
+    setShowDetails(!showDetails);
+  };
+  const handleCloseDetails = () => {
+    setShowDetails(false);
+  };
   const organ = [
     {
       name: "Heart",
@@ -78,87 +77,123 @@ function UserDashboard(props) {
   ];
 
   useEffect(() => {
-    const fetchDoctorList = async () => {
-      try {
-        const response = await fetch(
-          "http://localhost:8080/Services/Health/getDoctorList"
-        );
-        if (response.ok) {
-          const data = await response.json();
-          setDoctorList(data[0]); // Set the received doctor list to the state
-        } else {
-          throw new Error("Failed to fetch doctor list");
-        }
-      } catch (error) {
-        console.error("Error:", error);
-        // Handle error
-      }
-    };
-
-    const fetchDoctorReplies = async () => {
-      try {
-        const response = await fetch(
-          "http://localhost:8080/Services/Health/getQueriesForDoc",
-          {
-            method: "POST", // Use the appropriate HTTP method (POST/GET/PUT) for fetching replies
-            headers: {
-              "Content-Type": "application/json",
-              // Include other necessary headers
-            },
-            // Include any necessary request body or parameters
-            body: JSON.stringify({
-              userName: "doc",
-              id: "1",
-            }), // Assuming receivedProps contains the username
-          }
-        );
-
-        if (response.ok) {
-          const data = await response.json();
-          setDoctorReplies(data["queryList"][0].reply);
-        } else {
-          throw new Error("Failed to fetch doctor's replies");
-        }
-      } catch (error) {
-        console.error("Error:", error);
-        // Handle error
-      }
-    };
-
     fetchDoctorReplies();
     fetchDoctorList();
-  }, []); // Fetc
+    fetchPatientList();
+  }, []);
+
+  const fetchPatientList = async () => {
+    try {
+      const response = await fetch(
+        "http://localhost:8080/Services/Health/getPatientList"
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch");
+      }
+
+      const data = await response.json();
+      setPatientList(data); // Assuming the response is an array of doctor details
+      // console.log(data);
+      {
+        data.map((patient, index) => {
+          if (patient.username === userName) {
+            setId(index + 1);
+            console.log("the index is : ", index + 1);
+            // console.log(id);
+          }
+        });
+      }
+    } catch (error) {
+      console.error("Error fetching doctor list:", error);
+    }
+  };
+  const fetchDoctorList = async () => {
+    try {
+      const response = await fetch(
+        "http://localhost:8080/Services/Health/getDoctorList"
+      );
+      if (response.ok) {
+        const data = await response.json();
+        setDoctorList(data[0]); // Set the received doctor list to the state
+      } else {
+        throw new Error("Failed to fetch doctor list");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
 
   const handleDetailsClick = (organ, navigate) => {
     navigate(`/Organ-detail/${organ.name}`, {
       state: {
         organDetails: {
-          username: username,
+          username: userName,
           name: organ.name,
           description: organ.description,
           imageUrl: organ.imageUrl,
-          // imageUrl: organ.imageUrl, // Add URL string for the image if needed
         },
       },
     });
   };
+  const fetchDoctorReplies = async () => {
+    try {
+      const response = await fetch(
+        "http://localhost:8080/Services/Health/getQueriesForDoc",
+        {
+          method: "POST", // Use the appropriate HTTP method (POST/GET/PUT) for fetching replies
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            userName: userName,
+            id: id,
+          }),
+        }
+      );
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data["queryList"][0].reply);
+        setDoctorReplies(data["queryList"][0].reply);
+        // console.log(data["queryList"][0].reply);
+      } else {
+        throw new Error("Failed to fetch doctor's replies");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      // Handle error
+    }
+  };
+  console.log(showDetails);
 
   return (
     <div>
-      <div className="welcome">
-        {/* <h1>Welcome, {username}!</h1>{" "} */}
-        <div className="doctor-answers">
-          <p>
-            {doctorReplies && (
-              <h2>
-                {doctorList.doctorName} : {doctorList.doctorDesignation}
-              </h2>
-            )}
-            {doctorReplies && <h2>Doctor Answers: {doctorReplies}</h2>}
-          </p>
-        </div>
+      <div
+        className={`notification-icon ${showDetails ? "hide" : ""}`}
+        onClick={handleNotificationClick}
+      >
+        <img
+          src="https://img.icons8.com/?size=96&id=4PGnQfak1C3H&format=png"
+          alt="Doctor Icon"
+          className="doctor-image"
+        />
+
       </div>
+
+      <div className={`notification-details ${showDetails ? "show" : ""}`}>
+        <button className="close-btn" onClick={handleCloseDetails}>
+          &#x2716; {/* Unicode for "X" symbol */}
+        </button>
+        <h2>User: {userName}</h2>
+        <h2>Doctor: {doctorList.doctorName}</h2>
+        <h2>Doctor Reply: {doctorReplies}</h2>
+      </div>
+
+
+
       <div className="user-dashboard">
+
+
         {organ.map((organ, index) => (
           <div key={index} className="dashboard-card">
             <img
